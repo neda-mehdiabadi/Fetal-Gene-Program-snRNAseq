@@ -8,4 +8,43 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+# Defining the fetal gene program at single cell resolution in pediatric dilated cardiomyopathy. 
+
+# Abstract
+
+**Background:** A central dogma in cardiac biology is that the gene expression pattern observed in postnatal heart resemblance to those observed during fetal cardiac development in response to stress. The phenomenon of fetal gene re-activation in heart failure has been traditionally studied in cardiomyocytes, however, the extent to which the fetal gene program is recapitulated in other cardiac cell types is unknown. We present single nuclei RNA sequencing of apical left ventricle tissue from fetal (19-20 weeks, n=3), non-diseased (ND; 4-14 years, n=3) and early-onset DCM samples (5-10 years, n=4) to define the human fetal gene program in dilated cardiomyopathy (DCM), a common cause of heart failure in children and adults.
+
+**Methods and Results:**
+We performed single nuclei RNA sequencing with heart tissues from 3 fetal, 3 non-diseased and 4 DCM with an age of 0.475, 0.475, 0.475, 4, 10, 14, 5, 9,10,10 years, respectively. Single nuclei RNA seq analysis revealed 7 cell clusters across fetal, ND and DCM samples. Also, we investigated that the fetal gene program is broadly re-engaged in cardiomyocytes and cardiac fibroblasts and is not restricted to specific cell sub-populations in DCM. 
+
+**Conclusions:**
+This work provides insights into the critical gene expression networks that underpin DCM disease pathogenesis in children.
+
+# Authors
+Neda R. Mehdiabadi, Choon Boon Sim, Belinda Phipson, Ravi K. R. Kalathur, Yuliangzi Sun, Celine J. Vivien, Menno ter Huurne, Adam T. Piers, James E. Hudson, Alicia Oshlack, Robert G. Weintraub, Igor E. Konstantinov, Nathan J. Palpant, David A. Elliott, Enzo R. Porrello.
+
+# Analysis
+This website consists of the codes used to perform single nuclei RNA sequencing analyses for "Defining the Fetal Gene Program at Single Cell Resolution in Pediatric Dilated Cardiomyopathy".
+
+## Quality control and clustering
+
+* [Quality control of the cells](01-QualityControl.html)
+* Data integration and clustering between biological replicates within group
+    + [Fetal heart samples](https://bphipson.github.io/Human_Development_snRNAseq/02-ClusterFetal.html)
+    + [ND heart samples](https://bphipson.github.io/Human_Development_snRNAseq/03-ClusterYoung.html) (ND heart samples are the young heart samples already published in [Sim et al Circulation. 2021, PMID: 33682422](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.120.051921))
+    + [DCM heart samples](02-ClusterDCM.html)
+* [Marker analysis at broad cell type level](03-MarkerAnalysisBCT.html)
+
+## Differential expression analysis
+* [Differential expression analysis of broad cell type clusters](04-DE-BroadCellTypes.html)
+
+## Recluster broad cell lineages
+* [Cardiomyocytes](05-ClustCardioFND.html)
+* [Fibroblast](06-ClustFibroFND.html)
+
+## Code used to generate Figure presented in the paper
+* [Code to generate Figure](07-Figure.html)
+
+## [HeartExplorer](http://www.heartexplorer.org/) website 
+Also, we have developed an interactive website that permits interrogation of our data set and, hence, increases the data set’s accessibility and utility. To check our website, please visit [www.HeartExplorer.org](http://www.heartexplorer.org/).
+

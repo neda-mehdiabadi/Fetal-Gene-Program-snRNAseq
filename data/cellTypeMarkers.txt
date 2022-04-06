@@ -1,0 +1,34 @@
+Gene	Celltype
+GYPA	Erythroid
+GYPB	Erythroid
+TFRC	Erythroid
+ANLN	Cardiomyocyte (Proliferative)
+CDK1	Cardiomyocyte (Proliferative)
+WEE1	Cardiomyocyte (Proliferative)
+E2F1	Cardiomyocyte (Proliferative)
+ACTN2	Cardiomyocytes
+TNNT2	Cardiomyocytes
+ATP2A2	Cardiomyocytes
+MYH7	Cardiomyocytes
+VWF	Endothelial cells
+PECAM1	Endothelial cells
+ENG	Endothelial cells
+EMCN	Endothelial cells
+PDGFRB	Pericytes
+RGS5	Pericytes
+KCNJ8	Pericytes
+ABCC9	Pericytes
+VCAN	Fibroblast
+LAMB1	Fibroblast
+DCN	Fibroblast
+COL1A2	Fibroblast
+PTPRC	Immune cells
+CD74	Immune cells
+CD163	Immune cells
+CD14	Immune cells
+NRXN3	Neurons
+NRXN1	Neurons
+ERBB3	Neurons
+TAGLN	Smooth muscle cells
+MYH11	Smooth muscle cells
+ACTA2	Smooth muscle cells

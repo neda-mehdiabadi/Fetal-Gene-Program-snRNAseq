@@ -1,0 +1,682 @@
+---
+title: "Code used to generate the figure presented in the paper."
+author: "Neda R. Mehdiabadi"
+date: "24/02/2022"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+```
+
+# Load libraries and functions
+
+```{r}
+library(edgeR)
+library(RColorBrewer)
+library(org.Hs.eg.db)
+library(limma)
+library(Seurat)
+library(cowplot)
+library(DelayedArray)
+library(scran)
+library(NMF)
+library(workflowr)
+library(ggplot2)
+library(clustree)
+library(dplyr)
+library(speckle)
+```
+
+```{r}
+source("code/normCounts.R")
+source("code/findModes.R")
+source("code/ggplotColors.R")
+```
+
+# Read in the Fetal, ND and DCM data 
+
+```{rm readdata}
+
+fetal.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetal-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetalObjs.Rdata")
+
+##note: nd.integrated is also an integrated form of young heart samples. young.integrated has already been published in Sim et al., Circ. 2021, PMID: 33682422. 
+nd.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/nd-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/ndObjs.Rdata")
+
+dcm.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcm-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcmObjs.Rdata")
+
+```
+
+```{r}
+# Load unfiltered counts matrix for every sample (object all)
+load("/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/all-counts.Rdata")
+```
+
+
+# Set default clustering resolution
+
+```{rm}
+# Default 0.3
+Idents(fetal.integrated) <- fetal.integrated$Celltype
+DimPlot(fetal.integrated, reduction = "tsne",label=TRUE,label.size = 3)+NoLegend()
+table(fetal.integrated$biorep, fetal.integrated$Celltype)
+Idents(fetal.integrated) <- fetal.integrated$integrated_snn_res.0.3
+
+# Default 0.3
+##note: nd.integrated is also an integrated form of young heart samples. young.integrated has already been published in Sim et al., Circ. 2021, PMID: 33682422. 
+Idents(nd.integrated) <- nd.integrated$Celltype
+DimPlot(nd.integrated, reduction = "tsne",label=TRUE,label.size = 3)+NoLegend()
+table(nd.integrated$biorep, nd.integrated$Celltype)
+Idents(nd.integrated) <- nd.integrated$integrated_snn_res.0.3
+
+
+# Default 0.3
+Idents(dcm.integrated) <- dcm.integrated$Celltype
+DimPlot(dcm.integrated, reduction = "tsne",label=TRUE,label.size = 3)+NoLegend()
+table(dcm.integrated$biorep, dcm.integrated$Celltype)
+Idents(dcm.integrated) <- dcm.integrated$integrated_snn_res.0.3
+
+```
+
+# Merge all data together
+
+```{rm}
+heart <- merge(fetal.integrated, y = c(nd.integrated, dcm.integrated), project = "heart")
+```
+
+# Run new integration with SCtransform normalisation
+
+```{rm}
+#I ran this code once and saved the heart.integrated object, so I'll load the object for future use.
+heart.list <- SplitObject(heart, split.by = "biorep")
+
+for (i in 1:length(heart.list)) {
+  heart.list[[i]] <- SCTransform(heart.list[[i]], verbose = FALSE)
+}
+
+heart.anchors <- FindIntegrationAnchors(object.list = heart.list, dims=1:30,anchor.features = 3000)
+heart.integrated <- IntegrateData(anchorset = heart.anchors,dims=1:30)
+DefaultAssay(object = heart.integrated) <- "integrated"
+heart.integrated <- ScaleData(heart.integrated, verbose = FALSE)
+
+set.seed(10)
+heart.integrated <- RunPCA(heart.integrated, npcs = 50, verbose = FALSE)
+ElbowPlot(heart.integrated,ndims=50)
+heart.integrated <- FindNeighbors(heart.integrated, dims = 1:20)
+heart.integrated <- FindClusters(heart.integrated, resolution = 0.1)
+set.seed(10)
+heart.integrated <- RunUMAP(heart.integrated, reduction = "pca", dims = 1:20)
+Idents(heart.integrated) <- heart.integrated$Broad_celltype
+heart.integrated$orig.ident <- factor(heart.integrated$orig.ident,levels = c("Fetal","ND","DCM"))
+
+saveRDS(heart.integrated,file="/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/heart-int-FND-filtered.Rds")
+```
+
+```{r}
+heart.integrated <- readRDS("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/heart-int-FND-filtered.Rds")
+
+Idents(heart.integrated) <- heart.integrated$Broad_celltype
+
+heart.integrated$Broad_celltype <- factor(heart.integrated$Broad_celltype, levels = c("Er","CM(Prlf)","CM","Endo","Pericyte","Fib","Immune","Neuron","Smc"))
+
+heart.integrated$biorep <- factor(heart.integrated$biorep,levels = c("f1","f2","f3","nd1","nd2","nd3","d1","d2","d3","d4"))
+
+table(heart.integrated$orig.ident, heart.integrated$Broad_celltype)
+
+```
+
+# Figure 1B
+
+```{r}
+DefaultAssay(heart.integrated) <- "RNA"
+
+# Get gene annotation and gene filtering
+# I'm using gene annotation information from the `org.Hs.eg.db` package.
+
+ann <- AnnotationDbi:::select(org.Hs.eg.db,keys=rownames(all),columns=c("SYMBOL","ENTREZID","ENSEMBL","GENENAME","CHR"),keytype = "SYMBOL")
+m <- match(rownames(all),ann$SYMBOL)
+ann <- ann[m,]
+table(ann$SYMBOL==rownames(all))
+
+# Remove mitochondrial and ribosomal genes and genes with no ENTREZID
+# These genes are not informative for downstream analysis.
+
+mito <- grep("mitochondrial",ann$GENENAME)
+length(mito)
+ribo <- grep("ribosomal",ann$GENENAME)
+length(ribo)
+missingEZID <- which(is.na(ann$ENTREZID))
+length(missingEZID)
+m <- match(colnames(heart.integrated),colnames(all))
+all.counts <- all[,m]
+chuck <- unique(c(mito,ribo,missingEZID))
+length(chuck)
+all.counts.keep <- all.counts[-chuck,]
+ann.keep <- ann[-chuck,]
+table(ann.keep$SYMBOL==rownames(all.counts.keep))
+
+# Remove sex chromosome genes so that the sex doesn't play a role in downstream analysis
+sexchr <- ann.keep$CHR %in% c("X","Y")
+all.counts.keep <- all.counts.keep[!sexchr,]
+ann.keep <- ann.keep[!sexchr,]
+
+# Remove very lowly expressed genes
+# Removing very lowly expressed genes helps to reduce the noise in the data. Here we keep genes with at least 1 count in at least 20 cells. This means that a cluster made up of at least 20 cells can potentially be detected (minimum cluster size = 20 cells).
+numzero.genes <- rowSums(all.counts.keep==0)
+table(numzero.genes > (ncol(all.counts.keep)-20))
+keep.genes <- numzero.genes < (ncol(all.counts.keep)-20)
+table(keep.genes)
+all.keep <- all.counts.keep[keep.genes,]
+dim(all.keep)
+ann.keep <- ann.keep[keep.genes,]
+table(colnames(heart.integrated)==colnames(all.keep))
+table(rownames(all.keep)==ann.keep$SYMBOL)
+
+hm <- read.delim("data/cellTypeMarkers.txt",stringsAsFactors = FALSE, sep="\t", header = T)
+hgene <- toupper(hm$Gene)
+hgene <- unique(hgene)
+y <- DGEList(all.keep)
+log_counts <- normCounts(y,log=TRUE,prior.count=0.5)
+
+m <- match(hgene,rownames(log_counts))
+m <- m[!is.na(m)]
+broadct <- factor(heart.integrated$Broad_celltype)
+sumexpr <- matrix(NA,nrow=dim(log_counts)[1],ncol=length(levels(broadct)))
+rownames(sumexpr) <- rownames(log_counts)
+colnames(sumexpr) <- levels(broadct)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] <- tapply(log_counts[i,],broadct,mean)
+}
+
+#pdf(file="/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/Fetal_Gene_Program_snRNAseq/output/Figures/cellTypeMarkers.pdf",width=30,height=25)
+aheatmap(sumexpr[m,],Rowv = NA,Colv = NA, labRow = hgene,
+         fontsize=5,color="-RdYlBu",cexRow =1, cexCol = 1,
+         scale="none")
+#dev.off()
+
+
+```
+
+# Figure 1C
+
+```{r}
+DimPlot(heart.integrated, reduction = "umap",label=FALSE,label.size = 6, split.by = "orig.ident", cols = c("Er" = "brown4", "CM(Prlf)"= "darkorange2","CM"="#7570B3","Endo"="#E7298A","Pericyte"="#66A61E","Fib"="#E6AB02","Immune"="#A6761D","Neuron"="#666666","Smc"="#1F78B4"))
+```
+
+# Testing some cell type markers
+
+```{r celltypemarkersFeatureplot}
+
+DefaultAssay(heart.integrated) <- "SCT"
+FeaturePlot(heart.integrated, features = c("COL1A1","TNNT2","PECAM1","ACTA2","ERBB3","CD14","PDGFRB","ANLN","GYPA"),
+            pt.size = 0.2,ncol = 3, label = F)
+
+```
+
+# Figure 1D
+
+```{r}
+DefaultAssay(heart.integrated) <- "RNA"
+#remove Er and CM(Prlf) becaue they are not shared broad cell types across all groups (Fetal,ND & DCM)
+heart.integrated <- subset(heart.integrated,subset = Broad_celltype != "Er")
+heart.integrated <- subset(heart.integrated,subset = Broad_celltype != "CM(Prlf)")
+heart.integrated$Broad_celltype <- factor(heart.integrated$Broad_celltype, levels = c("CM","Endo","Pericyte","Fib","Immune","Neuron","Smc"))
+
+data <- data.frame(table(heart.integrated$Broad_celltype, heart.integrated$orig.ident))
+colnames(data) <- c("CellType", "Group","Percentage")
+for ( i in 1:7){
+    data$RelativePercentage[i] <- data$Percentage[i]/table(heart.integrated$orig.ident)[1]*100
+}
+
+for ( i in 8:14){
+  data$RelativePercentage[i] <- data$Percentage[i]/table(heart.integrated$orig.ident)[2]*100
+}
+for ( i in 15:21){
+  data$RelativePercentage[i] <- data$Percentage[i]/table(heart.integrated$orig.ident)[3]*100
+}
+options(digits=2)
+
+ggplot(data, aes(fill=CellType, y=RelativePercentage, x=Group)) +
+  geom_bar(position="stack", stat="identity")+scale_fill_brewer(palette = "Paired")+ theme_bw()+theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                                                                                            panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"))+labs(y="Relative Percentage [%]", x = "Group")
+
+```
+
+# Cell type composition analysis
+
+We test to see whether the cell type composition of the ND vs DCM heart tissues 
+differ using the `propeller` function in the `speckle` package.
+
+For the cell type composition analysis done for Fetal vs ND heart tissues, please refer to Sim et al., 2021, PMID: 33682422.
+
+Please refer to the following reference for further insight into the function:
+Phipson, B., Sim, C. B., Porrello, E. R., Hewitt, A. W., Powell, J., & Oshlack, A. (2021). propeller: testing for differences in cell type proportions in single cell data. bioRxiv.
+
+```{r}
+subset.data <- subset(heart.integrated, subset = orig.ident != "Fetal")
+subset.data$sample <- factor(subset.data$biorep, levels=c(paste("nd",1:3, sep=""),paste("d",1:4, sep="")))
+subset.data$group <- factor(subset.data$orig.ident, levels=c("ND","DCM"))
+group <- factor(rep(c("ND","DCM"), c(3,4)), 
+                levels=c("ND","DCM")) 
+
+# Barplots of proportions
+
+plotCellTypeProps(clusters=subset.data$Broad_celltype, sample=subset.data$sample)
+
+# Biological variability plots for ND vs DCM
+
+x <- getTransformedProps(clusters = subset.data$Broad_celltype, sample=subset.data$sample,
+                         transform="logit")
+#par(mfrow=c(1,2))
+plotCellTypeMeanVar(x$Counts)
+plotCellTypePropsMeanVar(x$Counts)
+
+# Testing for differences in proportions for Fetal vs ND
+
+out <- propeller(subset.data, transform = "logit")
+out
+# cell types with FDR < 0.05 difference
+rownames(out)[which(out$FDR<0.05)]
+print("No statistically significant shifts in cellular composition were observed between DCM and ND hearts")
+
+# Visualize the results
+ct <- rownames(out)
+par(mfrow=c(3,3))
+for(i in 1:nrow(out)){
+  stripchart(x$Proportions[ct[i],]~group, vertical=TRUE, pch=16, 
+             method="jitter", ylab="Proportion", main=ct[i], 
+             col=ggplotColors(2), cex=1.5, cex.lab=1.5, cex.axis=1.5,
+             cex.main=1.5)
+}
+
+```
+
+# Figure 1E
+
+```{r}
+
+broadct <- factor(heart.integrated$Broad_celltype)
+sam <- factor(heart.integrated$biorep,levels=c("f1","f2","f3","nd1","nd2","nd3","d1","d2","d3","d4"))
+newgrp <- paste(broadct,sam,sep=".")
+newgrp <- factor(newgrp,levels=paste(rep(levels(broadct),each=10),levels(sam),sep="."))
+table(newgrp)
+des <- model.matrix(~0+newgrp)
+colnames(des) <- levels(newgrp)
+dim(des)
+
+# Get gene annotation and gene filtering
+# I'm using gene annotation information from the `org.Hs.eg.db` package.
+
+ann <- AnnotationDbi:::select(org.Hs.eg.db,keys=rownames(all),columns=c("SYMBOL","ENTREZID","ENSEMBL","GENENAME","CHR"),keytype = "SYMBOL")
+m <- match(rownames(all),ann$SYMBOL)
+ann <- ann[m,]
+table(ann$SYMBOL==rownames(all))
+
+# Remove mitochondrial and ribosomal genes and genes with no ENTREZID
+# These genes are not informative for downstream analysis.
+
+mito <- grep("mitochondrial",ann$GENENAME)
+length(mito)
+ribo <- grep("ribosomal",ann$GENENAME)
+length(ribo)
+missingEZID <- which(is.na(ann$ENTREZID))
+length(missingEZID)
+m <- match(colnames(heart.integrated),colnames(all))
+all.counts <- all[,m]
+chuck <- unique(c(mito,ribo,missingEZID))
+length(chuck)
+all.counts.keep <- all.counts[-chuck,]
+ann.keep <- ann[-chuck,]
+table(ann.keep$SYMBOL==rownames(all.counts.keep))
+
+# Remove sex chromosome genes so that the sex doesn't play a role in downstream analysis
+sexchr <- ann.keep$CHR %in% c("X","Y")
+all.counts.keep <- all.counts.keep[!sexchr,]
+ann.keep <- ann.keep[!sexchr,]
+
+# Remove very lowly expressed genes
+# Removing very lowly expressed genes helps to reduce the noise in the data. Here we keep genes with at least 1 count in at least 20 cells. This means that a cluster made up of at least 20 cells can potentially be detected (minimum cluster size = 20 cells).
+numzero.genes <- rowSums(all.counts.keep==0)
+table(numzero.genes > (ncol(all.counts.keep)-20))
+keep.genes <- numzero.genes < (ncol(all.counts.keep)-20)
+table(keep.genes)
+all.keep <- all.counts.keep[keep.genes,]
+dim(all.keep)
+ann.keep <- ann.keep[keep.genes,]
+table(colnames(heart.integrated)==colnames(all.keep))
+table(rownames(all.keep)==ann.keep$SYMBOL)
+pb <- all.keep %*% des
+y.pb <- DGEList(pb)
+saminfo <- matrix(unlist(strsplit(colnames(y.pb$counts),split="[.]")),ncol=2,byrow=TRUE)
+bct <- factor(saminfo[,1])
+indiv <- factor(saminfo[,2])
+group <- rep(NA,ncol(y.pb))
+group[grep("f",indiv)] <- "Fetal"
+group[grep("nd",indiv)] <- "ND"
+group[grep("^d",indiv)] <- "DCM"
+group <- factor(group,levels=c("Fetal","ND","DCM"))
+targets.pb <- data.frame(bct,indiv,group)
+targets.pb$Sex <- c("Male","Male","Female","Male","Female","Male","Male","Female","Female","Female")
+sexgroup <- paste(group,targets.pb$Sex,sep=".")
+table(rownames(y.pb)==ann.keep$SYMBOL)
+y.pb$genes <- ann.keep
+
+bct2 <- as.character(bct)
+bct2[bct2 == "CM"] <- "cardio"
+bct2[bct2 == "Endo"] <- "endo"
+bct2[bct2 == "Pericyte"] <- "peri"
+bct2[bct2 == "Fib"] <- "fibro"
+bct2[bct2 == "Immune"] <- "immune"
+bct2[bct2 == "Neuron"] <- "neurons"
+bct2[bct2 == "Smc"] <- "smc"
+
+newgrp <- paste(bct2,group,targets.pb$Sex,sep=".")
+newgrp <- factor(newgrp)
+
+design <- model.matrix(~0+newgrp)
+colnames(design) <- levels(newgrp)
+y.pb <- calcNormFactors(y.pb)
+v <- voom(y.pb,design,plot=TRUE)
+fit <- lmFit(v,design)
+
+cont.data <- makeContrasts(DFcm = 0.5*(cardio.DCM.Male + cardio.DCM.Female) - 0.5*(cardio.Fetal.Male + cardio.Fetal.Female),
+                             DNcm = 0.5*(cardio.DCM.Male + cardio.DCM.Female) - 0.5*(cardio.ND.Male + cardio.ND.Female),
+                             FNcm = 0.5*(cardio.Fetal.Male + cardio.Fetal.Female) - 0.5*(cardio.ND.Male + cardio.ND.Female),
+                             FDcm = 0.5*(cardio.Fetal.Male + cardio.Fetal.Female) - 0.5*(cardio.DCM.Male + cardio.DCM.Female),
+                             NDcm = 0.5*(cardio.ND.Male + cardio.ND.Female) - 0.5*(cardio.DCM.Male + cardio.DCM.Female),
+                             NFcm = 0.5*(cardio.ND.Male + cardio.ND.Female) - 0.5*(cardio.Fetal.Male + cardio.Fetal.Female),
+
+                             DFfib = 0.5*(fibro.DCM.Male + fibro.DCM.Female) - 0.5*(fibro.Fetal.Male + fibro.Fetal.Female),
+                             DNfib = 0.5*(fibro.DCM.Male + fibro.DCM.Female) - 0.5*(fibro.ND.Male + fibro.ND.Female),
+                             FNfib = 0.5*(fibro.Fetal.Male + fibro.Fetal.Female) - 0.5*(fibro.ND.Male + fibro.ND.Female),
+                             FDfib = 0.5*(fibro.Fetal.Male + fibro.Fetal.Female) - 0.5*(fibro.DCM.Male + fibro.DCM.Female),
+                             NDfib = 0.5*(fibro.ND.Male + fibro.ND.Female) - 0.5*(fibro.DCM.Male + fibro.DCM.Female),
+                             NFfib = 0.5*(fibro.ND.Male + fibro.ND.Female) - 0.5*(fibro.Fetal.Male + fibro.Fetal.Female),
+
+
+                             DFendo = 0.5*(endo.DCM.Male + endo.DCM.Female) - 0.5*(endo.Fetal.Male + endo.Fetal.Female),
+                             DNendo = 0.5*(endo.DCM.Male + endo.DCM.Female) - 0.5*(endo.ND.Male + endo.ND.Female),
+                             FNendo = 0.5*(endo.Fetal.Male + endo.Fetal.Female) - 0.5*(endo.ND.Male + endo.ND.Female),
+                             FDendo = 0.5*(endo.Fetal.Male + endo.Fetal.Female) - 0.5*(endo.DCM.Male + endo.DCM.Female),
+                             NDendo = 0.5*(endo.ND.Male + endo.ND.Female) - 0.5*(endo.DCM.Male + endo.DCM.Female),
+                             NFendo = 0.5*(endo.ND.Male + endo.ND.Female) - 0.5*(endo.Fetal.Male + endo.Fetal.Female),
+
+
+                             DFperi = 0.5*(peri.DCM.Male + peri.DCM.Female) - 0.5*(peri.Fetal.Male + peri.Fetal.Female),
+                             DNperi = 0.5*(peri.DCM.Male + peri.DCM.Female) - 0.5*(peri.ND.Male + peri.ND.Female),
+                             FNperi = 0.5*(peri.Fetal.Male + peri.Fetal.Female) - 0.5*(peri.ND.Male + peri.ND.Female),
+                             FDperi = 0.5*(peri.Fetal.Male + peri.Fetal.Female) - 0.5*(peri.DCM.Male + peri.DCM.Female),
+                             NDperi = 0.5*(peri.ND.Male + peri.ND.Female) - 0.5*(peri.DCM.Male + peri.DCM.Female),
+                             NFperi = 0.5*(peri.ND.Male + peri.ND.Female) - 0.5*(peri.Fetal.Male + peri.Fetal.Female),
+
+                             DFimmune = 0.5*(immune.DCM.Male + immune.DCM.Female) - 0.5*(immune.Fetal.Male + immune.Fetal.Female),
+                             DNimmune = 0.5*(immune.DCM.Male + immune.DCM.Female) - 0.5*(immune.ND.Male + immune.ND.Female),
+                             FNimmune = 0.5*(immune.Fetal.Male + immune.Fetal.Female) - 0.5*(immune.ND.Male + immune.ND.Female),
+                             FDimmune = 0.5*(immune.Fetal.Male + immune.Fetal.Female) - 0.5*(immune.DCM.Male + immune.DCM.Female),
+                             NDimmune = 0.5*(immune.ND.Male + immune.ND.Female) - 0.5*(immune.DCM.Male + immune.DCM.Female),
+                             NFimmune = 0.5*(immune.ND.Male + immune.ND.Female) - 0.5*(immune.Fetal.Male + immune.Fetal.Female),
+
+
+                             DFneuron = 0.5*(neurons.DCM.Male + neurons.DCM.Female) - 0.5*(neurons.Fetal.Male + neurons.Fetal.Female),
+                             DNneuron = 0.5*(neurons.DCM.Male + neurons.DCM.Female) - 0.5*(neurons.ND.Male + neurons.ND.Female),
+                             FNneuron = 0.5*(neurons.Fetal.Male + neurons.Fetal.Female) - 0.5*(neurons.ND.Male + neurons.ND.Female),
+                             FDneuron = 0.5*(neurons.Fetal.Male + neurons.Fetal.Female) - 0.5*(neurons.DCM.Male + neurons.DCM.Female),
+                             NDneuron = 0.5*(neurons.ND.Male + neurons.ND.Female) - 0.5*(neurons.DCM.Male + neurons.DCM.Female),
+                             NFneuron = 0.5*(neurons.ND.Male + neurons.ND.Female) - 0.5*(neurons.Fetal.Male + neurons.Fetal.Female),
+
+
+                             DFsmc = 0.5*(smc.DCM.Male + smc.DCM.Female) - 0.5*(smc.Fetal.Male + smc.Fetal.Female),
+                             DNsmc = 0.5*(smc.DCM.Male + smc.DCM.Female) - 0.5*(smc.ND.Male + smc.ND.Female),
+                             FNsmc = 0.5*(smc.Fetal.Male + smc.Fetal.Female) - 0.5*(smc.ND.Male + smc.ND.Female),
+                             FDsmc = 0.5*(smc.Fetal.Male + smc.Fetal.Female) - 0.5*(smc.DCM.Male + smc.DCM.Female),
+                             NDsmc = 0.5*(smc.ND.Male + smc.ND.Female) - 0.5*(smc.DCM.Male + smc.DCM.Female),
+                             NFsmc = 0.5*(smc.ND.Male + smc.ND.Female) - 0.5*(smc.Fetal.Male + smc.Fetal.Female),
+                             levels=design)
+fit.data <- contrasts.fit(fit,contrasts = cont.data)
+fit.data <- eBayes(fit.data,robust=TRUE)
+
+summary(decideTests(fit.data))
+treat.data <- treat(fit.data,lfc=0)
+
+dt.data<-decideTests(treat.data)
+
+fdr <- apply(treat.data$p.value, 2, function(x) p.adjust(x, method="BH"))
+output <- data.frame(treat.data$genes,LogFC=treat.data$coefficients,AveExp=treat.data$Amean,tstat=treat.data$t, pvalue=treat.data$p.value, fdr=fdr)
+
+
+DvN <- matrix(NA,nrow = 2, ncol = 7)
+colnames(DvN) <- c("CM","Endo","Pericyte","Fib","Immune","Neuron","Smc")
+rownames(DvN) <- c("Up","Down")
+DvN[1,1] <- NoGenes <- dim(output %>% filter(output$fdr.DNcm < 0.05 & output$LogFC.DNcm > 1.5 ))[1]
+DvN[1,2] <- NoGenes <- dim(output %>% filter(output$fdr.DNendo < 0.05 & output$LogFC.DNendo > 1.5 ))[1]
+DvN[1,3] <- NoGenes <- dim(output %>% filter(output$fdr.DNperi < 0.05 & output$LogFC.DNperi > 1.5))[1]
+DvN[1,4] <- NoGenes <- dim(output %>% filter(output$fdr.DNfib < 0.05 & output$LogFC.DNfib > 1.5 ))[1]
+DvN[1,5] <- NoGenes <- dim(output %>% filter(output$fdr.DNimmune < 0.05 & output$LogFC.DNimmune > 1.5 ))[1]
+DvN[1,6] <- NoGenes <- dim(output %>% filter(output$fdr.DNneuron < 0.05 & output$LogFC.DNneuron > 1.5 ))[1]
+DvN[1,7] <- NoGenes <- dim(output %>% filter(output$fdr.DNsmc < 0.05 & output$LogFC.DNsmc > 1.5 ))[1]
+DvN[2,1] <- NoGenes <- dim(output %>% filter(output$fdr.DNcm < 0.05 & output$LogFC.DNcm < -1.5 ))[1]
+DvN[2,2] <- NoGenes <- dim(output %>% filter(output$fdr.DNendo < 0.05 & output$LogFC.DNendo < -1.5 ))[1]
+DvN[2,3] <- NoGenes <- dim(output %>% filter(output$fdr.DNperi < 0.05 & output$LogFC.DNperi < -1.5))[1]
+DvN[2,4] <- NoGenes <- dim(output %>% filter(output$fdr.DNfib < 0.05 & output$LogFC.DNfib < -1.5 ))[1]
+DvN[2,5] <- NoGenes <- dim(output %>% filter(output$fdr.DNimmune < 0.05 & output$LogFC.DNimmune < -1.5 ))[1]
+DvN[2,6] <- NoGenes <- dim(output %>% filter(output$fdr.DNneuron < 0.05 & output$LogFC.DNneuron < -1.5 ))[1]
+DvN[2,7] <- NoGenes <- dim(output %>% filter(output$fdr.DNsmc < 0.05 & output$LogFC.DNsmc < -1.5 ))[1]
+
+par(mfrow=c(1,1))
+par(mar=c(7,4,2,2))
+barplot(DvN,beside=TRUE,legend=TRUE,col=c("red","blue"),ylab="Number of significant genes",las=2,xlab="", ylim = c(0,500))
+title(main = "DCM versus ND")
+
+```
+
+# Figure 1F
+
+```{r}
+
+# Finding fetal gene program in CM
+DvF_ns_FvN_s_DvN_s_up_CM <- output %>% filter(output$fdr.FNcm < 0.05 & output$fdr.DNcm < 0.05 & output$LogFC.DNcm  > 1.5 & output$LogFC.FNcm > 1.5)
+DvF_ns_FvN_s_DvN_s_dn_CM <- output %>% filter(output$fdr.FNcm < 0.05 & output$fdr.DNcm < 0.05 & output$LogFC.DNcm  < -1.5 & output$LogFC.FNcm < -1.5)
+
+# Finding fetal gene program in Endo
+DvF_ns_FvN_s_DvN_s_up_Endo <- output %>% filter(output$fdr.FNendo < 0.05 & output$fdr.DNendo < 0.05 & output$LogFC.DNendo  > 1.5 & output$LogFC.FNendo > 1.5)
+DvF_ns_FvN_s_DvN_s_dn_Endo <- output %>% filter(output$fdr.FNendo < 0.05 & output$fdr.DNendo < 0.05 & output$LogFC.DNendo  < -1.5 & output$LogFC.FNendo < -1.5)
+
+
+# Finding fetal gene program in Pericyte
+DvF_ns_FvN_s_DvN_s_up_peri <- output %>% filter(output$fdr.FNperi < 0.05 & output$fdr.DNperi < 0.05 & output$LogFC.DNperi  > 1.5 & output$LogFC.FNperi > 1.5)
+DvF_ns_FvN_s_DvN_s_dn_peri <- output %>% filter(output$fdr.FNperi < 0.05 & output$fdr.DNperi < 0.05 & output$LogFC.DNperi  < -1.5 & output$LogFC.FNperi < -1.5)
+
+# Finding fetal gene program in Fib
+DvF_ns_FvN_s_DvN_s_up_Fib <- output %>% filter(output$fdr.FNfib < 0.05 & output$fdr.DNfib < 0.05 & output$LogFC.DNfib  > 1.5 & output$LogFC.FNfib > 1.5)
+DvF_ns_FvN_s_DvN_s_dn_Fib <- output %>% filter(output$fdr.FNfib < 0.05 & output$fdr.DNfib < 0.05 & output$LogFC.DNfib  < -1.5 & output$LogFC.FNfib < -1.5)
+
+# Finding fetal gene program in Immune
+DvF_ns_FvN_s_DvN_s_up_immune <- output %>% filter(output$fdr.FNimmune < 0.05 & output$fdr.DNimmune < 0.05 & output$LogFC.DNimmune  > 1.5 & output$LogFC.FNimmune > 1.5)
+DvF_ns_FvN_s_DvN_s_dn_immune <- output %>% filter(output$fdr.FNimmune < 0.05 & output$fdr.DNimmune < 0.05 & output$LogFC.DNimmune  < -1.5 & output$LogFC.FNimmune < -1.5)
+
+
+# Finding fetal gene program in Neuron
+DvF_ns_FvN_s_DvN_s_up_neuron <- output %>% filter(output$fdr.FNneuron < 0.05 & output$fdr.DNneuron < 0.05 & output$LogFC.DNneuron  > 1.5 & output$LogFC.FNneuron > 1.5)
+DvF_ns_FvN_s_DvN_s_dn_neuron <- output %>% filter(output$fdr.FNneuron < 0.05 & output$fdr.DNneuron < 0.05 & output$LogFC.DNneuron  < -1.5 & output$LogFC.FNneuron < -1.5)
+
+
+# Finding fetal gene program in Smc
+DvF_ns_FvN_s_DvN_s_up_smc <- output %>% filter(output$fdr.FNsmc < 0.05 & output$fdr.DNsmc < 0.05 & output$LogFC.DNsmc  > 1.5 & output$LogFC.FNsmc > 1.5)
+DvF_ns_FvN_s_DvN_s_dn_smc <- output %>% filter(output$fdr.FNsmc < 0.05 & output$fdr.DNsmc < 0.05 & output$LogFC.DNsmc  < -1.5 & output$LogFC.FNsmc < -1.5)
+
+fetal_react <- matrix(NA,nrow = 2, ncol = 7)
+colnames(fetal_react) <- c("CM","Endo","Pericyte","Fib","Immune","Neuron","Smc")
+rownames(fetal_react) <- c("Up","Down")
+
+fetal_react[1,1] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_up_CM)[1]
+fetal_react[2,1] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_dn_CM)[1]
+fetal_react[1,2] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_up_Endo)[1]
+fetal_react[2,2] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_dn_Endo)[1]
+fetal_react[1,3] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_up_peri)[1]
+fetal_react[2,3] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_dn_peri)[1]
+fetal_react[1,4] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_up_Fib)[1]
+fetal_react[2,4] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_dn_Fib)[1]
+fetal_react[1,5] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_up_immune)[1]
+fetal_react[2,5] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_dn_immune)[1]
+fetal_react[1,6] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_up_neuron)[1]
+fetal_react[2,6] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_dn_neuron)[1]
+fetal_react[1,7] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_up_smc)[1]
+fetal_react[2,7] <- NoGenes <- dim(DvF_ns_FvN_s_DvN_s_dn_smc)[1]
+
+par(mfrow=c(1,1))
+par(mar=c(7,4,2,2))
+barplot(fetal_react,beside=TRUE,legend=TRUE,col=c("red","blue"),ylab="Number of FDR < 0.05 genes",las=2,xlab="", ylim = c(0,100))
+title(main = "Reactivation of Fetal Genes")
+```
+
+# Figure 1G
+
+```{r}
+# Finding fetal gene program in CM
+DvF_ns_FvN_s_DvN_s_up <- output %>% filter(output$fdr.FNcm < 0.05 & output$fdr.DNcm < 0.05 & output$LogFC.DNcm  > 1.5 & output$LogFC.FNcm > 1.5)
+DvF_ns_FvN_s_DvN_s_dn <- output %>% filter(output$fdr.FNcm < 0.05 & output$fdr.DNcm < 0.05 & output$LogFC.DNcm  < -1.5 & output$LogFC.FNcm < -1.5)
+reactivated.cm <- rbind(DvF_ns_FvN_s_DvN_s_up,DvF_ns_FvN_s_DvN_s_dn)
+
+#save(reactivated.cm,file="/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/FGP-CM.csv")
+
+cardio.integrated <- readRDS("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/cardio-int-FND.Rds")
+DefaultAssay(cardio.integrated) <- "RNA"
+cardio.integrated$orig.ident <- factor(cardio.integrated$orig.ident,levels = c("Fetal","ND","DCM"))
+cardio.integrated$biorep <- factor(cardio.integrated$biorep,levels = c("f1","f2","f3","nd1","nd2","nd3","d1","d2","d3","d4"))
+sam <- factor(cardio.integrated$orig.ident,levels=c("Fetal","ND","DCM"))
+
+y.cardio <- DGEList(cardio.integrated@assays$RNA@counts)
+logcounts <- normCounts(y.cardio,log=TRUE,prior.count=0.5)
+
+index <- match(reactivated.cm$SYMBOL, rownames(logcounts))
+index <- na.omit(index)
+logcounts <- logcounts[index,]
+
+sumexpr <- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(sam)))
+rownames(sumexpr) <- rownames(logcounts)
+colnames(sumexpr) <- levels(sam)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] <- tapply(logcounts[i,],sam,mean)
+}
+
+# Fetal Gene Program in CM
+aheatmap(sumexpr,Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
+         fontsize=5,color="-RdYlBu",cexRow =1, cexCol = 1,
+         scale="row")
+
+term.up <- topGO(goana(de=DvF_ns_FvN_s_DvN_s_up$ENTREZID,universe=output$ENTREZID,species="Hs"),number=1200)
+sigGO.up <- term.up %>% filter(term.up$P.DE < 0.05 & term.up$Ont =="BP")
+sigGO.up[1:10,]
+
+term.dn <- topGO(goana(de=DvF_ns_FvN_s_DvN_s_dn$ENTREZID,universe=output$ENTREZID,species="Hs"),number=1200)
+sigGO.dn <- term.dn %>% filter(term.dn$P.DE < 0.05 & term.dn$Ont =="BP")
+sigGO.dn[1:10,]
+```
+
+# Figure 1H
+
+```{r}
+# Finding fetal gene program in Fib
+DvF_ns_FvN_s_DvN_s_up <- output %>% filter(output$fdr.FNfib < 0.05 & output$fdr.DNfib < 0.05 & output$LogFC.DNfib  > 1.5 & output$LogFC.FNfib > 1.5)
+DvF_ns_FvN_s_DvN_s_dn <- output %>% filter(output$fdr.FNfib < 0.05 & output$fdr.DNfib < 0.05 & output$LogFC.DNfib  < -1.5 & output$LogFC.FNfib < -1.5)
+reactivated <- rbind(DvF_ns_FvN_s_DvN_s_up,DvF_ns_FvN_s_DvN_s_dn)
+
+#save(reactivated,file="/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/FGP-Fib.csv")
+
+fibro.integrated <- readRDS("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/fibro-int-FND.Rds")
+DefaultAssay(fibro.integrated) <- "RNA"
+fibro.integrated$orig.ident <- factor(fibro.integrated$orig.ident,levels = c("Fetal","ND","DCM"))
+fibro.integrated$biorep <- factor(fibro.integrated$biorep,levels = c("f1","f2","f3","nd1","nd2","nd3","d1","d2","d3","d4"))
+sam <- factor(fibro.integrated$orig.ident,levels=c("Fetal","ND","DCM"))
+
+y.fibro <- DGEList(fibro.integrated@assays$RNA@counts)
+logcounts <- normCounts(y.fibro,log=TRUE,prior.count=0.5)
+
+index <- match(reactivated$SYMBOL, rownames(logcounts))
+index <- na.omit(index)
+logcounts <- logcounts[index,]
+
+sumexpr <- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(sam)))
+rownames(sumexpr) <- rownames(logcounts)
+colnames(sumexpr) <- levels(sam)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] <- tapply(logcounts[i,],sam,mean)
+}
+
+# Fetal Gene Program in Fib
+aheatmap(sumexpr,Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
+         fontsize=5,color="-RdYlBu",cexRow =1, cexCol = 1,
+         scale="row")
+
+term.up <- topGO(goana(de=DvF_ns_FvN_s_DvN_s_up$ENTREZID,universe=output$ENTREZID,species="Hs"),number=1200)
+sigGO.up <- term.up %>% filter(term.up$P.DE < 0.05 & term.up$Ont =="BP")
+sigGO.up[1:10,]
+
+term.dn <- topGO(goana(de=DvF_ns_FvN_s_DvN_s_dn$ENTREZID,universe=output$ENTREZID,species="Hs"),number=1200)
+sigGO.dn <- term.dn %>% filter(term.dn$P.DE < 0.05 & term.dn$Ont =="BP")
+sigGO.dn[1:10,]
+```
+
+# Figure 1J
+
+```{r}
+clust <- factor(cardio.integrated$integrated_snn_res.0.1)
+sam <- factor(cardio.integrated$orig.ident,levels=c("Fetal","ND","DCM"))
+newgrp <- paste(clust,sam,sep=".")
+newgrp <- factor(newgrp,levels=paste(rep(levels(clust),each=3),levels(sam),sep="."))
+y.cardio <- DGEList(cardio.integrated@assays$RNA@counts)
+logcounts <- normCounts(y.cardio,log=TRUE,prior.count=0.5)
+
+index <- match(reactivated.cm$SYMBOL, rownames(logcounts))
+index <- na.omit(index)
+logcounts <- logcounts[index,]
+
+sumexpr <- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(newgrp)))
+rownames(sumexpr) <- rownames(logcounts)
+colnames(sumexpr) <- levels(newgrp)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] <- tapply(logcounts[i,],newgrp,mean)
+}
+
+# Fetal Gene Program in sub clusters of CM broad cell type
+aheatmap(sumexpr[,c(1,4,7,10,13,16,2,5,8,11,14,17,3,6,9,12,15,18)],Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
+         fontsize=5,color="-RdYlBu",cexRow =1, cexCol = 1,
+         scale="row")
+```
+
+# Figure 1K
+
+```{r}
+clust <- factor(fibro.integrated$integrated_snn_res.0.1)
+sam <- factor(fibro.integrated$orig.ident,levels=c("Fetal","ND","DCM"))
+newgrp <- paste(clust,sam,sep=".")
+newgrp <- factor(newgrp,levels=paste(rep(levels(clust),each=3),levels(sam),sep="."))
+y.fibro <- DGEList(fibro.integrated@assays$RNA@counts)
+logcounts <- normCounts(y.fibro,log=TRUE,prior.count=0.5)
+
+index <- match(reactivated$SYMBOL, rownames(logcounts))
+index <- na.omit(index)
+logcounts <- logcounts[index,]
+
+sumexpr <- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(newgrp)))
+rownames(sumexpr) <- rownames(logcounts)
+colnames(sumexpr) <- levels(newgrp)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] <- tapply(logcounts[i,],newgrp,mean)
+}
+
+# Fetal Gene Program in sub clusters of CM broad cell type
+aheatmap(sumexpr[,c(1,4,7,10,13,2,5,8,11,14,3,6,9,12,15)],Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
+         fontsize=5,color="-RdYlBu",cexRow =1, cexCol = 1,
+         scale="row")
+```

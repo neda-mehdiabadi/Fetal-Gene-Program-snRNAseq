@@ -1,0 +1,428 @@
+---
+title: "Recluster fibroblast lineage"
+author: "Belinda Phipson & Neda R. Mehdiabadi"
+date: "10/28/2019-05/11/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+```
+
+# Load libraries and functions
+
+```{r}
+library(edgeR)
+library(RColorBrewer)
+library(org.Hs.eg.db)
+library(limma)
+library(Seurat)
+library(cowplot)
+library(DelayedArray)
+library(scran)
+library(NMF)
+library(workflowr)
+library(ggplot2)
+library(clustree)
+library(dplyr)
+```
+
+```{r}
+source("code/normCounts.R")
+source("code/findModes.R")
+source("code/ggplotColors.R")
+```
+
+```{r readTargets}
+targets <- read.delim("data/targets.txt",header=TRUE, stringsAsFactors = FALSE)
+targets$FileName2 <- paste(targets$FileName,"/",sep="")
+targets$Group_ID2 <- gsub("LV_","",targets$Group_ID)
+group <- c("fetal_1","fetal_2","fetal_3",
+           "non-diseased_1","non-diseased_2","non-diseased_3",
+           "diseased_1","diseased_2",
+           "diseased_3","diseased_4")
+m <- match(group, targets$Group_ID2)
+targets <- targets[m,]
+```
+
+```{rm readData}
+fetal.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetal-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetalObjs.Rdata")
+##note: nd.integrated is also an integrated form of young heart samples. young.integrated has already been published in Sim et al., 2021
+nd.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/nd-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/ndObjs.Rdata")
+
+dcm.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcm-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcmObjs.Rdata")
+```
+
+# Set default clustering resolution
+
+```{rm}
+# Default 0.3
+Idents(fetal.integrated) <- fetal.integrated$integrated_snn_res.0.3
+DimPlot(fetal.integrated, reduction = "tsne",label=TRUE,label.size = 6)+NoLegend()
+
+# Default 0.3
+Idents(nd.integrated) <- nd.integrated$integrated_snn_res.0.3
+DimPlot(nd.integrated, reduction = "tsne",label=TRUE,label.size = 6)+NoLegend()
+
+# Default 0.3
+Idents(dcm.integrated) <- dcm.integrated$integrated_snn_res.0.3
+DimPlot(dcm.integrated, reduction = "tsne",label=TRUE,label.size = 6)+NoLegend()
+
+```
+
+# Merge all data together
+
+```{r}
+# This data has already been generated and saved as the heart object.
+#heart <- merge(fetal.integrated, y = c(nd.integrated, dcm.integrated), project = "heart")
+heart <- readRDS("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/heart-int-FND-filtered.Rds")
+table(heart$orig.ident)
+```
+
+# Get fibroblast cells only
+
+```{r}
+Idents(heart) <- heart$Broad_celltype
+fibro <- subset(heart,subset = Broad_celltype == "Fib")
+```
+
+# Check for poor quality cells
+
+Check for cells with very low number of uniquely detected genes.
+
+```{r}
+DefaultAssay(fibro) <- "RNA"
+par(mar=c(4,4,2,1))
+plot(density(fibro$nFeature_RNA),main="Number of genes detected")
+abline(v=500,col=4, lty=3)
+legend("topright",lty=2,col=4,legend="#genes = 500")
+plot(density(fibro$nCount_RNA),main="Library size")
+abline(v=2500,col=4, lty=3)
+legend("topright",lty=2,col=4,legend="library size = 2500")
+
+fibro <- subset(fibro, subset = nFeature_RNA > 500 & nCount_RNA > 2500)
+```
+
+
+# Run new integration with SCtransform normalisation
+
+
+```{rm}
+# For the sake of time, I ran the following code once and saved the object as fibro-int-FND.Rds
+
+fibro.list <- SplitObject(fibro, split.by = "biorep")
+min <-  min(sapply(fibro.list, ncol))
+for (i in 1:length(fibro.list)) {
+    fibro.list[[i]] <- SCTransform(fibro.list[[i]], verbose = FALSE)
+}
+fibro.anchors <- FindIntegrationAnchors(object.list = fibro.list, dims=1:30,anchor.features = 3000,k.filter=min)
+fibro.integrated <- IntegrateData(anchorset = fibro.anchors,dims=1:30)
+DefaultAssay(object = fibro.integrated) <- "integrated"
+fibro.integrated <- ScaleData(fibro.integrated, verbose = FALSE)
+fibro.integrated <- RunPCA(fibro.integrated, npcs = 50, verbose = FALSE)
+ElbowPlot(fibro.integrated,ndims=50)
+fibro.integrated <- FindNeighbors(fibro.integrated, dims = 1:20)
+fibro.integrated <- FindClusters(fibro.integrated, resolution = 0.1)
+table(Idents(fibro.integrated))
+saveRDS(fibro.integrated, file = "/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/fibro-int-FND.Rds")
+
+```
+
+```{r}
+fibro.integrated <- readRDS("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/fibro-int-FND.Rds")
+
+fibro.integrated$orig.ident <- factor(fibro.integrated$orig.ident,levels = c("Fetal","ND","DCM"))
+fibro.integrated$biorep <- factor(fibro.integrated$biorep,levels = c("f1","f2","f3","nd1","nd2","nd3","d1","d2","d3","d4"))
+table(fibro.integrated$orig.ident)
+table(fibro.integrated$biorep)
+
+```
+
+```{r,fig.height=10, fig.width=12}
+VizDimLoadings(fibro.integrated, dims = 1:4, reduction = "pca")
+```
+
+```{r}
+DimPlot(fibro.integrated, reduction = "pca",group.by="orig.ident")
+DimPlot(fibro.integrated, reduction = "pca",group.by="biorep")
+DimPlot(fibro.integrated, reduction = "pca",group.by="sex")
+DimPlot(fibro.integrated, reduction = "pca",group.by="batch")
+```
+
+```{r,fig.height=10, fig.width=12}
+DimHeatmap(fibro.integrated, dims = 1:15, cells = 500, balanced = TRUE)
+DimHeatmap(fibro.integrated, dims = 16:30, cells = 500, balanced = TRUE)
+DimHeatmap(fibro.integrated, dims = 31:45, cells = 500, balanced = TRUE)
+```
+
+```{r}
+par(mar=c(5,4,2,2))
+barplot(table(Idents(fibro.integrated)),ylab="Number of cells",xlab="Clusters")
+title("Number of cells in each cluster")
+```
+
+
+## Visualisation with UMAP
+
+```{r tsne}
+set.seed(10)
+fibro.integrated <- RunUMAP(fibro.integrated, reduction = "pca", dims = 1:20)
+```
+
+
+```{r}
+DimPlot(fibro.integrated, reduction = "umap",label=TRUE,label.size = 6,pt.size = 0.5, split.by = "orig.ident")+NoLegend()
+```
+
+
+```{r}
+DimPlot(fibro.integrated, reduction = "umap", group.by = "biorep")
+```
+
+```{r}
+DimPlot(fibro.integrated, reduction = "umap", group.by = "sex")
+```
+
+```{r}
+DimPlot(fibro.integrated, reduction = "umap", group.by = "batch")
+```
+
+
+```{r,fig.width=12,fig.height=4}
+par(mfrow=c(1,1))
+par(mar=c(4,4,2,2))
+tab <- table(Idents(fibro.integrated),fibro.integrated$biorep)
+barplot(t(tab/rowSums(tab)),beside=TRUE,col=ggplotColors(10),legend=TRUE)
+```
+
+```{r,fig.width=12,fig.height=4}
+par(mfrow=c(1,1))
+par(mar=c(4,4,2,2))
+tab <- table(Idents(fibro.integrated),fibro.integrated$orig.ident)
+barplot(t(tab/rowSums(tab)),beside=TRUE,col=ggplotColors(3))
+legend("topleft",legend=colnames(tab),fill=ggplotColors(3))
+```
+
+# Find DEG per sub cluster
+
+```{r}
+DefaultAssay(fibro.integrated) <- "RNA"
+Idents(fibro.integrated) <- fibro.integrated$integrated_snn_res.0.1
+# Load unfiltered counts matrix for every sample (object all)
+load("/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/all-counts.Rdata")
+```
+
+```{r}
+columns(org.Hs.eg.db)
+ann <- AnnotationDbi:::select(org.Hs.eg.db,keys=rownames(all),columns=c("SYMBOL","ENTREZID","ENSEMBL","GENENAME","CHR"),keytype = "SYMBOL")
+m <- match(rownames(all),ann$SYMBOL)
+ann <- ann[m,]
+table(ann$SYMBOL==rownames(all))
+```
+
+```{r}
+mito <- grep("mitochondrial",ann$GENENAME)
+length(mito)
+ribo <- grep("ribosomal",ann$GENENAME)
+length(ribo)
+missingEZID <- which(is.na(ann$ENTREZID))
+length(missingEZID)
+```
+
+# Find Markers
+
+```{r markers}
+# Limma-trend for DE
+m <- match(colnames(fibro.integrated),colnames(all))
+all.counts <- all[,m]
+```
+
+```{r}
+chuck <- unique(c(mito,ribo,missingEZID))
+length(chuck)
+all.counts.keep <- all.counts[-chuck,]
+ann.keep <- ann[-chuck,]
+table(ann.keep$SYMBOL==rownames(all.counts.keep))
+```
+
+```{r}
+numzero.genes <- rowSums(all.counts.keep==0)
+
+table(numzero.genes > (ncol(all.counts.keep)-20))
+
+keep.genes <- numzero.genes < (ncol(all.counts.keep)-20)
+table(keep.genes)
+
+all.keep <- all.counts.keep[keep.genes,]
+dim(all.keep)
+
+ann.keep <- ann.keep[keep.genes,]
+```
+
+
+```{r}
+y.fibro <- DGEList(all.keep)
+
+logcounts <- normCounts(y.fibro,log=TRUE,prior.count=0.5)
+
+maxclust <- length(levels(Idents(fibro.integrated)))-1
+
+grp <- paste("c",Idents(fibro.integrated),sep = "")
+grp <- factor(grp,levels = paste("c",0:maxclust,sep=""))
+
+design <- model.matrix(~0+grp+fibro.integrated$biorep)
+colnames(design)[1:(maxclust+1)] <- levels(grp)
+
+mycont <- matrix(0,ncol=length(levels(grp)),nrow=length(levels(grp)))
+colnames(mycont)<-levels(grp)
+diag(mycont)<-1
+mycont[upper.tri(mycont)]<- -1/(length(levels(factor(grp)))-1)
+mycont[lower.tri(mycont)]<- -1/(length(levels(factor(grp)))-1)
+
+# Fill out remaining rows with 0s
+zero.rows <- matrix(0,ncol=length(levels(grp)),nrow=(ncol(design)-length(levels(Idents(fibro.integrated)))))
+test <- rbind(mycont,zero.rows)
+
+
+fit <- lmFit(logcounts,design)
+fit.cont <- contrasts.fit(fit,contrasts=test)
+fit.cont <- eBayes(fit.cont,trend=TRUE,robust=TRUE)
+
+fit.cont$genes <- ann.keep
+
+summary(decideTests(fit.cont))
+
+treat <- treat(fit.cont,lfc=0.25)
+
+dt <- decideTests(treat)
+summary(dt)
+
+```
+
+```{r,fig.width=10,fig.height=10}
+par(mfrow=c(2,3))
+for(i in 1:ncol(mycont)){
+  plotMD(treat,coef=i,status = dt[,i],hl.cex=0.5)
+  abline(h=0,col=colours()[c(226)])
+  lines(lowess(treat$Amean,treat$coefficients[,i]),lwd=1.5,col=4)
+}
+```
+
+
+## Write out marker genes for each cluster
+
+```{rm eval=FALSE}
+contnames <- colnames(mycont)
+
+for(i in 1:length(contnames)){
+  topsig <- topTreat(treat,coef=i,n=Inf)
+  write.csv(topsig,file=paste("./output/Fib-Cluster-",contnames[i],".csv",sep=""))
+}
+```
+
+```{rm}
+fdr <- apply(treat$p.value, 2, function(x) p.adjust(x, method="BH"))
+output <- data.frame(treat$genes,LogFC=treat$coefficients,AveExp=treat$Amean,tstat=treat$t, pvalue=treat$p.value, fdr=fdr)
+write.csv(output,file="./output/Fib-MarkerAnalysis.csv")
+```
+
+# Perform gene set testing on C2 and GO sets
+
+```{rm}
+contnames <- colnames(mycont)
+
+load("/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/human_c2_v5p2.rdata")
+load("/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/human_c5_v5p2.rdata")
+
+c2.id <- ids2indices(Hs.c2,treat$genes$ENTREZID)
+c5.id <- ids2indices(Hs.c5,treat$genes$ENTREZID)
+
+reactome.id <-c2.id[grep("REACTOME",names(c2.id))]
+
+c2.c0 <- cameraPR(treat$t[,1],c2.id)
+reactome.c0 <- cameraPR(treat$t[,1],reactome.id)
+go.c0 <- cameraPR(treat$t[,1],c5.id)
+
+for(i in 1:length(contnames)){
+  write.csv(cameraPR(treat$t[,i],c2.id),file=paste("./output/Fib-GeneSetTests-c2-",contnames[i],".csv",sep=""))
+  write.csv(cameraPR(treat$t[,i],reactome.id),file=paste("./output/Fib-GeneSetTests-reactome-",contnames[i],".csv",sep=""))
+  write.csv(cameraPR(treat$t[,i],c5.id),file=paste("./output/Fib-GeneSetTests-go-",contnames[i],".csv",sep=""))
+}
+```
+
+# Check quality of clusters
+
+The quality of the clusters look good.
+
+```{r}
+par(mfrow=c(1,1))
+numgenes <- colSums(all.keep!=0)
+boxplot(numgenes~grp)
+```
+
+
+# Heatmap of marker genes
+
+```{r}
+sam <- factor(fibro.integrated$biorep,levels=c("f1","f2","f3","nd1","nd2","nd3","d1","d2","d3","d4"))
+newgrp <- paste(grp,sam,sep=".")
+newgrp <- factor(newgrp,levels=paste(rep(levels(grp),each=10),levels(sam),sep="."))
+o <-order(newgrp)
+clust <- rep(levels(grp),each=10)
+samps <- rep(levels(sam),length(levels(grp)))
+```
+
+## Summarise expression across cells 
+
+```{r}
+sumexpr <- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(newgrp)))
+rownames(sumexpr) <- rownames(logcounts)
+colnames(sumexpr) <- levels(newgrp)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] <- tapply(logcounts[i,],newgrp,mean)
+}
+
+```
+
+```{r sigheatmap, fig.width=12,fig.height=12}
+sig.genes <- gene.label <- vector("list", length(levels(grp)))
+for(i in 1:length(sig.genes)){
+  top <- topTreat(treat,coef=i,n=Inf)
+  sig.genes[[i]] <- rownames(top)[top$logFC>0][1:10]
+  gene.label[[i]] <- paste(rownames(top)[top$logFC>0][1:10],levels(grp)[i],sep="-")
+} 
+
+csig <- unlist(sig.genes)
+genes <- unlist(gene.label)
+
+myColors <- list(Clust=NA,Sample=NA)
+myColors$Clust<-sample(ggplotColors(length(levels(grp))),length(levels(grp)))
+names(myColors$Clust)<-levels(grp)
+myColors$Sample <- sample(ggplotColors(length(levels(sam))),length(levels(sam)))
+names(myColors$Sample) <- levels(sam)
+
+
+#pdf(file="./output/Figures/fibro-heatmap-siggenes-summarised-FND-filtered.pdf",width=20,height=20,onefile = FALSE)
+aheatmap(sumexpr[csig,],Rowv = NA,Colv = NA, labRow = genes,
+         annCol=list(Clust=clust,Sample=samps),
+         annColors=myColors,
+         fontsize=16,color="-RdYlBu",
+         scale="none")
+#dev.off()
+```
+
+
+
+
+
+
+
+
+
+
