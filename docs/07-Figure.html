@@ -36,6 +36,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -343,7 +345,13 @@ div.tocify {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -517,13 +525,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong78db7d6">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomnedamehdiabadiFetalGeneProgramsnRNAseqtreee953defb473f910b9bacacf4ddfa9c30125ea2a8targetblanke953defa">
 <span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>Repository version:</strong> 78db7d6
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/tree/e953defb473f910b9bacacf4ddfa9c30125ea2a8" target="_blank">e953def</a>
 </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong78db7d6"
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomnedamehdiabadiFetalGeneProgramsnRNAseqtreee953defb473f910b9bacacf4ddfa9c30125ea2a8targetblanke953defa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -532,7 +542,8 @@ and connecting the code version to the results is critical for
 reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version 78db7d6.
+The results in this page were generated with repository version
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/tree/e953defb473f910b9bacacf4ddfa9c30125ea2a8" target="_blank">e953def</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -593,10 +604,27 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/07-Figure.html" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
-78db7d6
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/78db7d63ce74e3f658e429cc408431400450ef05/analysis/07-Figure.Rmd" target="_blank">78db7d6</a>
 </td>
 <td>
 neda-mehdiabadi
@@ -960,12 +988,86 @@ aheatmap(sumexpr[m,],Rowv = NA,Colv = NA, labRow = hgene,
          fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
          scale=&quot;none&quot;)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
+Past versions of unnamed-chunk-9-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-9-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-9-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#dev.off()</code></pre>
 </div>
 <div id="figure-1c" class="section level1">
 <h1>Figure 1C</h1>
 <pre class="r"><code>DimPlot(heart.integrated, reduction = &quot;umap&quot;,label=FALSE,label.size = 6, split.by = &quot;orig.ident&quot;, cols = c(&quot;Er&quot; = &quot;brown4&quot;, &quot;CM(Prlf)&quot;= &quot;darkorange2&quot;,&quot;CM&quot;=&quot;#7570B3&quot;,&quot;Endo&quot;=&quot;#E7298A&quot;,&quot;Pericyte&quot;=&quot;#66A61E&quot;,&quot;Fib&quot;=&quot;#E6AB02&quot;,&quot;Immune&quot;=&quot;#A6761D&quot;,&quot;Neuron&quot;=&quot;#666666&quot;,&quot;Smc&quot;=&quot;#1F78B4&quot;))</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
+Past versions of unnamed-chunk-10-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-10-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-10-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="testing-some-cell-type-markers" class="section level1">
 <h1>Testing some cell type markers</h1>
@@ -973,6 +1075,43 @@ aheatmap(sumexpr[m,],Rowv = NA,Colv = NA, labRow = hgene,
 FeaturePlot(heart.integrated, features = c(&quot;COL1A1&quot;,&quot;TNNT2&quot;,&quot;PECAM1&quot;,&quot;ACTA2&quot;,&quot;ERBB3&quot;,&quot;CD14&quot;,&quot;PDGFRB&quot;,&quot;ANLN&quot;,&quot;GYPA&quot;),
             pt.size = 0.2,ncol = 3, label = F)</code></pre>
 <p><img src="figure/07-Figure.Rmd/celltypemarkersFeatureplot-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-celltypemarkersFeatureplot-1">
+Past versions of celltypemarkersFeatureplot-1.png
+</button>
+</p>
+<div id="fig-celltypemarkersFeatureplot-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/celltypemarkersFeatureplot-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="figure-1d" class="section level1">
 <h1>Figure 1D</h1>
@@ -1000,6 +1139,43 @@ ggplot(data, aes(fill=CellType, y=RelativePercentage, x=Group)) +
   geom_bar(position=&quot;stack&quot;, stat=&quot;identity&quot;)+scale_fill_brewer(palette = &quot;Paired&quot;)+ theme_bw()+theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                                                                                             panel.grid.minor = element_blank(), axis.line = element_line(colour = &quot;black&quot;))+labs(y=&quot;Relative Percentage [%]&quot;, x = &quot;Group&quot;)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-11-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="cell-type-composition-analysis" class="section level1">
 <h1>Cell type composition analysis</h1>
@@ -1023,6 +1199,43 @@ group &lt;- factor(rep(c(&quot;ND&quot;,&quot;DCM&quot;), c(3,4)),
 plotCellTypeProps(clusters=subset.data$Broad_celltype, sample=subset.data$sample)</code></pre>
 <pre><code>Performing logit transformation of proportions</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-1">
+Past versions of unnamed-chunk-12-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-12-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Biological variability plots for ND vs DCM
 
 x &lt;- getTransformedProps(clusters = subset.data$Broad_celltype, sample=subset.data$sample,
@@ -1032,8 +1245,82 @@ x &lt;- getTransformedProps(clusters = subset.data$Broad_celltype, sample=subset
 plotCellTypeMeanVar(x$Counts)</code></pre>
 <pre><code>Using classic mode.</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-2">
+Past versions of unnamed-chunk-12-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-12-2.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>plotCellTypePropsMeanVar(x$Counts)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-12-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-3">
+Past versions of unnamed-chunk-12-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-12-3.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Testing for differences in proportions for Fetal vs ND
 
 out &lt;- propeller(subset.data, transform = &quot;logit&quot;)</code></pre>
@@ -1072,6 +1359,43 @@ for(i in 1:nrow(out)){
              cex.main=1.5)
 }</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-12-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-12-4">
+Past versions of unnamed-chunk-12-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-12-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-12-4.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="figure-1e" class="section level1">
 <h1>Figure 1E</h1>
@@ -1212,6 +1536,43 @@ colnames(design) &lt;- levels(newgrp)
 y.pb &lt;- calcNormFactors(y.pb)
 v &lt;- voom(y.pb,design,plot=TRUE)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
+Past versions of unnamed-chunk-13-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-13-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>fit &lt;- lmFit(v,design)
 
 cont.data &lt;- makeContrasts(DFcm = 0.5*(cardio.DCM.Male + cardio.DCM.Female) - 0.5*(cardio.Fetal.Male + cardio.Fetal.Female),
@@ -1318,6 +1679,43 @@ par(mar=c(7,4,2,2))
 barplot(DvN,beside=TRUE,legend=TRUE,col=c(&quot;red&quot;,&quot;blue&quot;),ylab=&quot;Number of significant genes&quot;,las=2,xlab=&quot;&quot;, ylim = c(0,500))
 title(main = &quot;DCM versus ND&quot;)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-13-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-2">
+Past versions of unnamed-chunk-13-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-13-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-13-2.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="figure-1f" class="section level1">
 <h1>Figure 1F</h1>
@@ -1376,6 +1774,43 @@ par(mar=c(7,4,2,2))
 barplot(fetal_react,beside=TRUE,legend=TRUE,col=c(&quot;red&quot;,&quot;blue&quot;),ylab=&quot;Number of FDR &lt; 0.05 genes&quot;,las=2,xlab=&quot;&quot;, ylim = c(0,100))
 title(main = &quot;Reactivation of Fetal Genes&quot;)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-14-1">
+Past versions of unnamed-chunk-14-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-14-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-14-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="figure-1g" class="section level1">
 <h1>Figure 1G</h1>
@@ -1412,6 +1847,43 @@ aheatmap(sumexpr,Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
          fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
          scale=&quot;row&quot;)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-15-1">
+Past versions of unnamed-chunk-15-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-15-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-15-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>term.up &lt;- topGO(goana(de=DvF_ns_FvN_s_DvN_s_up$ENTREZID,universe=output$ENTREZID,species=&quot;Hs&quot;),number=1200)
 sigGO.up &lt;- term.up %&gt;% filter(term.up$P.DE &lt; 0.05 &amp; term.up$Ont ==&quot;BP&quot;)
 sigGO.up[1:10,]</code></pre>
@@ -1487,6 +1959,43 @@ aheatmap(sumexpr,Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
          fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
          scale=&quot;row&quot;)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-16-1">
+Past versions of unnamed-chunk-16-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-16-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-16-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>term.up &lt;- topGO(goana(de=DvF_ns_FvN_s_DvN_s_up$ENTREZID,universe=output$ENTREZID,species=&quot;Hs&quot;),number=1200)
 sigGO.up &lt;- term.up %&gt;% filter(term.up$P.DE &lt; 0.05 &amp; term.up$Ont ==&quot;BP&quot;)
 sigGO.up[1:10,]</code></pre>
@@ -1542,6 +2051,43 @@ aheatmap(sumexpr[,c(1,4,7,10,13,16,2,5,8,11,14,17,3,6,9,12,15,18)],Rowv = NA,Col
          fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
          scale=&quot;row&quot;)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-17-1">
+Past versions of unnamed-chunk-17-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-17-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-17-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="figure-1k" class="section level1">
 <h1>Figure 1K</h1>
@@ -1569,6 +2115,43 @@ aheatmap(sumexpr[,c(1,4,7,10,13,2,5,8,11,14,3,6,9,12,15)],Rowv = NA,Colv = NA, l
          fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
          scale=&quot;row&quot;)</code></pre>
 <p><img src="figure/07-Figure.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-18-1">
+Past versions of unnamed-chunk-18-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-18-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq/blob/457dc9868db42bbeda5cec569432de2be65a2d3f/docs/figure/07-Figure.Rmd/unnamed-chunk-18-1.png" target="_blank">457dc98</a>
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
