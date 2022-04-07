@@ -1,7 +1,7 @@
-name: "Fetal-Gene-Program-snRNAseq"
+name: Fetal-Gene-Program-snRNAseq
 output_dir: ../docs
 navbar:
-  title: "Fetal-Gene-Program-snRNAseq"
+  title: Fetal-Gene-Program-snRNAseq
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/neda-mehdiabadi/Fetal-Gene-Program-snRNAseq
 output:
   workflowr::wflow_html:
     toc: yes
