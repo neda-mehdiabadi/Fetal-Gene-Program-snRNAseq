@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Neda R. Mehdiabadi" />
+
+
+<title>Code used to generate the figure presented in the paper.</title>
+
+<script src="site_libs/header-attrs-2.12.1/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Fetal-Gene-Program-snRNAseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Code used to generate the figure presented
+in the paper.</h1>
+<h4 class="author">Neda R. Mehdiabadi</h4>
+<h4 class="date">24/02/2022</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-04-07
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong>
+<code>Fetal-Gene-Program-snRNAseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220406code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20220406)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220406code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220406)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong78db7d6">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 78db7d6
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong78db7d6"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 78db7d6.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+working directory clean
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/07-Figure.Rmd</code>) and HTML
+(<code>docs/07-Figure.html</code>) files. If you’ve configured a remote
+Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+78db7d6
+</td>
+<td>
+neda-mehdiabadi
+</td>
+<td>
+2022-04-07
+</td>
+<td>
+wflow_publish(c("analysis/<em>Rmd", "data/</em>txt", "data/README.md",
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="load-libraries-and-functions" class="section level1">
+<h1>Load libraries and functions</h1>
+<pre class="r"><code>library(edgeR)</code></pre>
+<pre><code>Loading required package: limma</code></pre>
+<pre class="r"><code>library(RColorBrewer)
+library(org.Hs.eg.db)</code></pre>
+<pre><code>Loading required package: AnnotationDbi</code></pre>
+<pre><code>Loading required package: stats4</code></pre>
+<pre><code>Loading required package: BiocGenerics</code></pre>
+<pre><code>
+Attaching package: &#39;BiocGenerics&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:limma&#39;:
+
+    plotMA</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
+
+    IQR, mad, sd, var, xtabs</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    anyDuplicated, append, as.data.frame, basename, cbind, colnames,
+    dirname, do.call, duplicated, eval, evalq, Filter, Find, get, grep,
+    grepl, intersect, is.unsorted, lapply, Map, mapply, match, mget,
+    order, paste, pmax, pmax.int, pmin, pmin.int, Position, rank,
+    rbind, Reduce, rownames, sapply, setdiff, sort, table, tapply,
+    union, unique, unsplit, which.max, which.min</code></pre>
+<pre><code>Loading required package: Biobase</code></pre>
+<pre><code>Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    &#39;browseVignettes()&#39;. To cite Bioconductor, see
+    &#39;citation(&quot;Biobase&quot;)&#39;, and for packages &#39;citation(&quot;pkgname&quot;)&#39;.</code></pre>
+<pre><code>Loading required package: IRanges</code></pre>
+<pre><code>Loading required package: S4Vectors</code></pre>
+<pre><code>
+Attaching package: &#39;S4Vectors&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    expand.grid, I, unname</code></pre>
+<pre><code></code></pre>
+<pre class="r"><code>library(limma)
+library(Seurat)</code></pre>
+<pre><code>Attaching SeuratObject</code></pre>
+<pre class="r"><code>library(cowplot)
+library(DelayedArray)</code></pre>
+<pre><code>Loading required package: Matrix</code></pre>
+<pre><code>
+Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:S4Vectors&#39;:
+
+    expand</code></pre>
+<pre><code>Loading required package: MatrixGenerics</code></pre>
+<pre><code>Loading required package: matrixStats</code></pre>
+<pre><code>
+Attaching package: &#39;matrixStats&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:Biobase&#39;:
+
+    anyMissing, rowMedians</code></pre>
+<pre><code>
+Attaching package: &#39;MatrixGenerics&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:matrixStats&#39;:
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars</code></pre>
+<pre><code>The following object is masked from &#39;package:Biobase&#39;:
+
+    rowMedians</code></pre>
+<pre><code>
+Attaching package: &#39;DelayedArray&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    aperm, apply, rowsum, scale, sweep</code></pre>
+<pre class="r"><code>library(scran)</code></pre>
+<pre><code>Loading required package: SingleCellExperiment</code></pre>
+<pre><code>Loading required package: SummarizedExperiment</code></pre>
+<pre><code>Loading required package: GenomicRanges</code></pre>
+<pre><code>Loading required package: GenomeInfoDb</code></pre>
+<pre><code>
+Attaching package: &#39;SummarizedExperiment&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:SeuratObject&#39;:
+
+    Assays</code></pre>
+<pre><code>The following object is masked from &#39;package:Seurat&#39;:
+
+    Assays</code></pre>
+<pre><code>
+Attaching package: &#39;SingleCellExperiment&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:edgeR&#39;:
+
+    cpm</code></pre>
+<pre><code>Loading required package: scuttle</code></pre>
+<pre class="r"><code>library(NMF)</code></pre>
+<pre><code>Loading required package: pkgmaker</code></pre>
+<pre><code>Loading required package: registry</code></pre>
+<pre><code>
+Attaching package: &#39;pkgmaker&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:S4Vectors&#39;:
+
+    new2</code></pre>
+<pre><code>Loading required package: rngtools</code></pre>
+<pre><code>Loading required package: cluster</code></pre>
+<pre><code>NMF - BioConductor layer [OK] | Shared memory capabilities [NO: synchronicity] | Cores 31/32</code></pre>
+<pre><code>  To enable shared memory capabilities, try: install.extras(&#39;
+NMF
+&#39;)</code></pre>
+<pre><code>
+Attaching package: &#39;NMF&#39;</code></pre>
+<pre><code>The following object is masked from &#39;package:DelayedArray&#39;:
+
+    seed</code></pre>
+<pre><code>The following object is masked from &#39;package:S4Vectors&#39;:
+
+    nrun</code></pre>
+<pre class="r"><code>library(workflowr)
+library(ggplot2)
+library(clustree)</code></pre>
+<pre><code>Loading required package: ggraph</code></pre>
+<pre class="r"><code>library(dplyr)</code></pre>
+<pre><code>
+Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>The following objects are masked from &#39;package:GenomicRanges&#39;:
+
+    intersect, setdiff, union</code></pre>
+<pre><code>The following object is masked from &#39;package:GenomeInfoDb&#39;:
+
+    intersect</code></pre>
+<pre><code>The following object is masked from &#39;package:matrixStats&#39;:
+
+    count</code></pre>
+<pre><code>The following object is masked from &#39;package:AnnotationDbi&#39;:
+
+    select</code></pre>
+<pre><code>The following objects are masked from &#39;package:IRanges&#39;:
+
+    collapse, desc, intersect, setdiff, slice, union</code></pre>
+<pre><code>The following objects are masked from &#39;package:S4Vectors&#39;:
+
+    first, intersect, rename, setdiff, setequal, union</code></pre>
+<pre><code>The following object is masked from &#39;package:Biobase&#39;:
+
+    combine</code></pre>
+<pre><code>The following objects are masked from &#39;package:BiocGenerics&#39;:
+
+    combine, intersect, setdiff, union</code></pre>
+<pre><code>The following objects are masked from &#39;package:stats&#39;:
+
+    filter, lag</code></pre>
+<pre><code>The following objects are masked from &#39;package:base&#39;:
+
+    intersect, setdiff, setequal, union</code></pre>
+<pre class="r"><code>library(speckle)</code></pre>
+<pre><code></code></pre>
+<pre class="r"><code>source(&quot;code/normCounts.R&quot;)
+source(&quot;code/findModes.R&quot;)
+source(&quot;code/ggplotColors.R&quot;)</code></pre>
+</div>
+<div id="read-in-the-fetal-nd-and-dcm-data" class="section level1">
+<h1>Read in the Fetal, ND and DCM data</h1>
+<pre class="rm"><code>
+fetal.integrated &lt;- readRDS(file=&quot;/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetal-int.Rds&quot;)
+load(file=&quot;/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetalObjs.Rdata&quot;)
+
+##note: nd.integrated is also an integrated form of young heart samples. young.integrated has already been published in Sim et al., Circ. 2021, PMID: 33682422. 
+nd.integrated &lt;- readRDS(file=&quot;/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/nd-int.Rds&quot;)
+load(file=&quot;/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/ndObjs.Rdata&quot;)
+
+dcm.integrated &lt;- readRDS(file=&quot;/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcm-int.Rds&quot;)
+load(file=&quot;/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcmObjs.Rdata&quot;)
+</code></pre>
+<pre class="r"><code># Load unfiltered counts matrix for every sample (object all)
+load(&quot;/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/all-counts.Rdata&quot;)</code></pre>
+</div>
+<div id="set-default-clustering-resolution" class="section level1">
+<h1>Set default clustering resolution</h1>
+<pre class="rm"><code># Default 0.3
+Idents(fetal.integrated) &lt;- fetal.integrated$Celltype
+DimPlot(fetal.integrated, reduction = &quot;tsne&quot;,label=TRUE,label.size = 3)+NoLegend()
+table(fetal.integrated$biorep, fetal.integrated$Celltype)
+Idents(fetal.integrated) &lt;- fetal.integrated$integrated_snn_res.0.3
+
+# Default 0.3
+##note: nd.integrated is also an integrated form of young heart samples. young.integrated has already been published in Sim et al., Circ. 2021, PMID: 33682422. 
+Idents(nd.integrated) &lt;- nd.integrated$Celltype
+DimPlot(nd.integrated, reduction = &quot;tsne&quot;,label=TRUE,label.size = 3)+NoLegend()
+table(nd.integrated$biorep, nd.integrated$Celltype)
+Idents(nd.integrated) &lt;- nd.integrated$integrated_snn_res.0.3
+
+
+# Default 0.3
+Idents(dcm.integrated) &lt;- dcm.integrated$Celltype
+DimPlot(dcm.integrated, reduction = &quot;tsne&quot;,label=TRUE,label.size = 3)+NoLegend()
+table(dcm.integrated$biorep, dcm.integrated$Celltype)
+Idents(dcm.integrated) &lt;- dcm.integrated$integrated_snn_res.0.3
+</code></pre>
+</div>
+<div id="merge-all-data-together" class="section level1">
+<h1>Merge all data together</h1>
+<pre class="rm"><code>heart &lt;- merge(fetal.integrated, y = c(nd.integrated, dcm.integrated), project = &quot;heart&quot;)</code></pre>
+</div>
+<div id="run-new-integration-with-sctransform-normalisation"
+class="section level1">
+<h1>Run new integration with SCtransform normalisation</h1>
+<pre class="rm"><code>#I ran this code once and saved the heart.integrated object, so I&#39;ll load the object for future use.
+heart.list &lt;- SplitObject(heart, split.by = &quot;biorep&quot;)
+
+for (i in 1:length(heart.list)) {
+  heart.list[[i]] &lt;- SCTransform(heart.list[[i]], verbose = FALSE)
+}
+
+heart.anchors &lt;- FindIntegrationAnchors(object.list = heart.list, dims=1:30,anchor.features = 3000)
+heart.integrated &lt;- IntegrateData(anchorset = heart.anchors,dims=1:30)
+DefaultAssay(object = heart.integrated) &lt;- &quot;integrated&quot;
+heart.integrated &lt;- ScaleData(heart.integrated, verbose = FALSE)
+
+set.seed(10)
+heart.integrated &lt;- RunPCA(heart.integrated, npcs = 50, verbose = FALSE)
+ElbowPlot(heart.integrated,ndims=50)
+heart.integrated &lt;- FindNeighbors(heart.integrated, dims = 1:20)
+heart.integrated &lt;- FindClusters(heart.integrated, resolution = 0.1)
+set.seed(10)
+heart.integrated &lt;- RunUMAP(heart.integrated, reduction = &quot;pca&quot;, dims = 1:20)
+Idents(heart.integrated) &lt;- heart.integrated$Broad_celltype
+heart.integrated$orig.ident &lt;- factor(heart.integrated$orig.ident,levels = c(&quot;Fetal&quot;,&quot;ND&quot;,&quot;DCM&quot;))
+
+saveRDS(heart.integrated,file=&quot;/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/heart-int-FND-filtered.Rds&quot;)</code></pre>
+<pre class="r"><code>heart.integrated &lt;- readRDS(&quot;/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/heart-int-FND-filtered.Rds&quot;)
+
+Idents(heart.integrated) &lt;- heart.integrated$Broad_celltype
+
+heart.integrated$Broad_celltype &lt;- factor(heart.integrated$Broad_celltype, levels = c(&quot;Er&quot;,&quot;CM(Prlf)&quot;,&quot;CM&quot;,&quot;Endo&quot;,&quot;Pericyte&quot;,&quot;Fib&quot;,&quot;Immune&quot;,&quot;Neuron&quot;,&quot;Smc&quot;))
+
+heart.integrated$biorep &lt;- factor(heart.integrated$biorep,levels = c(&quot;f1&quot;,&quot;f2&quot;,&quot;f3&quot;,&quot;nd1&quot;,&quot;nd2&quot;,&quot;nd3&quot;,&quot;d1&quot;,&quot;d2&quot;,&quot;d3&quot;,&quot;d4&quot;))
+
+table(heart.integrated$orig.ident, heart.integrated$Broad_celltype)</code></pre>
+<pre><code>       
+           Er CM(Prlf)    CM  Endo Pericyte   Fib Immune Neuron   Smc
+  Fetal   123     2862 16333  2748     1393  2985    757    349   210
+  ND        0        0  7750  1523     1153  4115   1876    411   136
+  DCM       0        0 10290  5610     2871  8985   3811    451   694</code></pre>
+</div>
+<div id="figure-1b" class="section level1">
+<h1>Figure 1B</h1>
+<pre class="r"><code>DefaultAssay(heart.integrated) &lt;- &quot;RNA&quot;
+
+# Get gene annotation and gene filtering
+# I&#39;m using gene annotation information from the `org.Hs.eg.db` package.
+
+ann &lt;- AnnotationDbi:::select(org.Hs.eg.db,keys=rownames(all),columns=c(&quot;SYMBOL&quot;,&quot;ENTREZID&quot;,&quot;ENSEMBL&quot;,&quot;GENENAME&quot;,&quot;CHR&quot;),keytype = &quot;SYMBOL&quot;)</code></pre>
+<pre><code>Warning in .deprecatedColsMessage(): Accessing gene location information via &#39;CHR&#39;,&#39;CHRLOC&#39;,&#39;CHRLOCEND&#39; is
+  deprecated. Please use a range based accessor like genes(), or select()
+  with columns values like TXCHROM and TXSTART on a TxDb or OrganismDb
+  object instead.</code></pre>
+<pre><code>&#39;select()&#39; returned 1:many mapping between keys and columns</code></pre>
+<pre class="r"><code>m &lt;- match(rownames(all),ann$SYMBOL)
+ann &lt;- ann[m,]
+table(ann$SYMBOL==rownames(all))</code></pre>
+<pre><code>
+ TRUE 
+33939 </code></pre>
+<pre class="r"><code># Remove mitochondrial and ribosomal genes and genes with no ENTREZID
+# These genes are not informative for downstream analysis.
+
+mito &lt;- grep(&quot;mitochondrial&quot;,ann$GENENAME)
+length(mito)</code></pre>
+<pre><code>[1] 224</code></pre>
+<pre class="r"><code>ribo &lt;- grep(&quot;ribosomal&quot;,ann$GENENAME)
+length(ribo)</code></pre>
+<pre><code>[1] 197</code></pre>
+<pre class="r"><code>missingEZID &lt;- which(is.na(ann$ENTREZID))
+length(missingEZID)</code></pre>
+<pre><code>[1] 10976</code></pre>
+<pre class="r"><code>m &lt;- match(colnames(heart.integrated),colnames(all))
+all.counts &lt;- all[,m]
+chuck &lt;- unique(c(mito,ribo,missingEZID))
+length(chuck)</code></pre>
+<pre><code>[1] 11318</code></pre>
+<pre class="r"><code>all.counts.keep &lt;- all.counts[-chuck,]
+ann.keep &lt;- ann[-chuck,]
+table(ann.keep$SYMBOL==rownames(all.counts.keep))</code></pre>
+<pre><code>
+ TRUE 
+22621 </code></pre>
+<pre class="r"><code># Remove sex chromosome genes so that the sex doesn&#39;t play a role in downstream analysis
+sexchr &lt;- ann.keep$CHR %in% c(&quot;X&quot;,&quot;Y&quot;)
+all.counts.keep &lt;- all.counts.keep[!sexchr,]
+ann.keep &lt;- ann.keep[!sexchr,]
+
+# Remove very lowly expressed genes
+# Removing very lowly expressed genes helps to reduce the noise in the data. Here we keep genes with at least 1 count in at least 20 cells. This means that a cluster made up of at least 20 cells can potentially be detected (minimum cluster size = 20 cells).
+numzero.genes &lt;- rowSums(all.counts.keep==0)
+table(numzero.genes &gt; (ncol(all.counts.keep)-20))</code></pre>
+<pre><code>
+FALSE  TRUE 
+18232  3401 </code></pre>
+<pre class="r"><code>keep.genes &lt;- numzero.genes &lt; (ncol(all.counts.keep)-20)
+table(keep.genes)</code></pre>
+<pre><code>keep.genes
+FALSE  TRUE 
+ 3444 18189 </code></pre>
+<pre class="r"><code>all.keep &lt;- all.counts.keep[keep.genes,]
+dim(all.keep)</code></pre>
+<pre><code>[1] 18189 77436</code></pre>
+<pre class="r"><code>ann.keep &lt;- ann.keep[keep.genes,]
+table(colnames(heart.integrated)==colnames(all.keep))</code></pre>
+<pre><code>
+ TRUE 
+77436 </code></pre>
+<pre class="r"><code>table(rownames(all.keep)==ann.keep$SYMBOL)</code></pre>
+<pre><code>
+ TRUE 
+18189 </code></pre>
+<pre class="r"><code>hm &lt;- read.delim(&quot;data/cellTypeMarkers.txt&quot;,stringsAsFactors = FALSE, sep=&quot;\t&quot;, header = T)
+hgene &lt;- toupper(hm$Gene)
+hgene &lt;- unique(hgene)
+y &lt;- DGEList(all.keep)
+log_counts &lt;- normCounts(y,log=TRUE,prior.count=0.5)
+
+m &lt;- match(hgene,rownames(log_counts))
+m &lt;- m[!is.na(m)]
+broadct &lt;- factor(heart.integrated$Broad_celltype)
+sumexpr &lt;- matrix(NA,nrow=dim(log_counts)[1],ncol=length(levels(broadct)))
+rownames(sumexpr) &lt;- rownames(log_counts)
+colnames(sumexpr) &lt;- levels(broadct)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] &lt;- tapply(log_counts[i,],broadct,mean)
+}
+
+#pdf(file=&quot;/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/Fetal_Gene_Program_snRNAseq/output/Figures/cellTypeMarkers.pdf&quot;,width=30,height=25)
+aheatmap(sumexpr[m,],Rowv = NA,Colv = NA, labRow = hgene,
+         fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
+         scale=&quot;none&quot;)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#dev.off()</code></pre>
+</div>
+<div id="figure-1c" class="section level1">
+<h1>Figure 1C</h1>
+<pre class="r"><code>DimPlot(heart.integrated, reduction = &quot;umap&quot;,label=FALSE,label.size = 6, split.by = &quot;orig.ident&quot;, cols = c(&quot;Er&quot; = &quot;brown4&quot;, &quot;CM(Prlf)&quot;= &quot;darkorange2&quot;,&quot;CM&quot;=&quot;#7570B3&quot;,&quot;Endo&quot;=&quot;#E7298A&quot;,&quot;Pericyte&quot;=&quot;#66A61E&quot;,&quot;Fib&quot;=&quot;#E6AB02&quot;,&quot;Immune&quot;=&quot;#A6761D&quot;,&quot;Neuron&quot;=&quot;#666666&quot;,&quot;Smc&quot;=&quot;#1F78B4&quot;))</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="testing-some-cell-type-markers" class="section level1">
+<h1>Testing some cell type markers</h1>
+<pre class="r"><code>DefaultAssay(heart.integrated) &lt;- &quot;SCT&quot;
+FeaturePlot(heart.integrated, features = c(&quot;COL1A1&quot;,&quot;TNNT2&quot;,&quot;PECAM1&quot;,&quot;ACTA2&quot;,&quot;ERBB3&quot;,&quot;CD14&quot;,&quot;PDGFRB&quot;,&quot;ANLN&quot;,&quot;GYPA&quot;),
+            pt.size = 0.2,ncol = 3, label = F)</code></pre>
+<p><img src="figure/07-Figure.Rmd/celltypemarkersFeatureplot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="figure-1d" class="section level1">
+<h1>Figure 1D</h1>
+<pre class="r"><code>DefaultAssay(heart.integrated) &lt;- &quot;RNA&quot;
+#remove Er and CM(Prlf) becaue they are not shared broad cell types across all groups (Fetal,ND &amp; DCM)
+heart.integrated &lt;- subset(heart.integrated,subset = Broad_celltype != &quot;Er&quot;)
+heart.integrated &lt;- subset(heart.integrated,subset = Broad_celltype != &quot;CM(Prlf)&quot;)
+heart.integrated$Broad_celltype &lt;- factor(heart.integrated$Broad_celltype, levels = c(&quot;CM&quot;,&quot;Endo&quot;,&quot;Pericyte&quot;,&quot;Fib&quot;,&quot;Immune&quot;,&quot;Neuron&quot;,&quot;Smc&quot;))
+
+data &lt;- data.frame(table(heart.integrated$Broad_celltype, heart.integrated$orig.ident))
+colnames(data) &lt;- c(&quot;CellType&quot;, &quot;Group&quot;,&quot;Percentage&quot;)
+for ( i in 1:7){
+    data$RelativePercentage[i] &lt;- data$Percentage[i]/table(heart.integrated$orig.ident)[1]*100
+}
+
+for ( i in 8:14){
+  data$RelativePercentage[i] &lt;- data$Percentage[i]/table(heart.integrated$orig.ident)[2]*100
+}
+for ( i in 15:21){
+  data$RelativePercentage[i] &lt;- data$Percentage[i]/table(heart.integrated$orig.ident)[3]*100
+}
+options(digits=2)
+
+ggplot(data, aes(fill=CellType, y=RelativePercentage, x=Group)) +
+  geom_bar(position=&quot;stack&quot;, stat=&quot;identity&quot;)+scale_fill_brewer(palette = &quot;Paired&quot;)+ theme_bw()+theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                                                                                            panel.grid.minor = element_blank(), axis.line = element_line(colour = &quot;black&quot;))+labs(y=&quot;Relative Percentage [%]&quot;, x = &quot;Group&quot;)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="cell-type-composition-analysis" class="section level1">
+<h1>Cell type composition analysis</h1>
+<p>We test to see whether the cell type composition of the ND vs DCM
+heart tissues differ using the <code>propeller</code> function in the
+<code>speckle</code> package.</p>
+<p>For the cell type composition analysis done for Fetal vs ND heart
+tissues, please refer to Sim et al., 2021, PMID: 33682422.</p>
+<p>Please refer to the following reference for further insight into the
+function: Phipson, B., Sim, C. B., Porrello, E. R., Hewitt, A. W.,
+Powell, J., &amp; Oshlack, A. (2021). propeller: testing for differences
+in cell type proportions in single cell data. bioRxiv.</p>
+<pre class="r"><code>subset.data &lt;- subset(heart.integrated, subset = orig.ident != &quot;Fetal&quot;)
+subset.data$sample &lt;- factor(subset.data$biorep, levels=c(paste(&quot;nd&quot;,1:3, sep=&quot;&quot;),paste(&quot;d&quot;,1:4, sep=&quot;&quot;)))
+subset.data$group &lt;- factor(subset.data$orig.ident, levels=c(&quot;ND&quot;,&quot;DCM&quot;))
+group &lt;- factor(rep(c(&quot;ND&quot;,&quot;DCM&quot;), c(3,4)), 
+                levels=c(&quot;ND&quot;,&quot;DCM&quot;)) 
+
+# Barplots of proportions
+
+plotCellTypeProps(clusters=subset.data$Broad_celltype, sample=subset.data$sample)</code></pre>
+<pre><code>Performing logit transformation of proportions</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Biological variability plots for ND vs DCM
+
+x &lt;- getTransformedProps(clusters = subset.data$Broad_celltype, sample=subset.data$sample,
+                         transform=&quot;logit&quot;)</code></pre>
+<pre><code>Performing logit transformation of proportions</code></pre>
+<pre class="r"><code>#par(mfrow=c(1,2))
+plotCellTypeMeanVar(x$Counts)</code></pre>
+<pre><code>Using classic mode.</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotCellTypePropsMeanVar(x$Counts)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-12-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Testing for differences in proportions for Fetal vs ND
+
+out &lt;- propeller(subset.data, transform = &quot;logit&quot;)</code></pre>
+<pre><code>extracting sample information from Seurat object
+Performing logit transformation of proportions</code></pre>
+<pre><code>group variable has 2 levels, t-tests will be performed</code></pre>
+<pre class="r"><code>out</code></pre>
+<pre><code>         BaselineProp.clusters BaselineProp.Freq PropMean.ND PropMean.DCM
+Smc                        Smc             0.017      0.0085        0.021
+Neuron                  Neuron             0.017      0.0262        0.013
+Endo                      Endo             0.144      0.0925        0.162
+CM                          CM             0.363      0.4268        0.316
+Pericyte              Pericyte             0.081      0.0754        0.086
+Fib                        Fib             0.264      0.2619        0.281
+Immune                  Immune             0.114      0.1088        0.122
+         PropRatio Tstatistic P.Value  FDR
+Smc           0.41      -2.09   0.044 0.31
+Neuron        1.96       1.38   0.175 0.44
+Endo          0.57      -1.29   0.206 0.44
+CM            1.35       1.17   0.250 0.44
+Pericyte      0.87      -0.69   0.495 0.69
+Fib           0.93      -0.40   0.691 0.81
+Immune        0.89      -0.12   0.903 0.90</code></pre>
+<pre class="r"><code># cell types with FDR &lt; 0.05 difference
+rownames(out)[which(out$FDR&lt;0.05)]</code></pre>
+<pre><code>character(0)</code></pre>
+<pre class="r"><code>print(&quot;No statistically significant shifts in cellular composition were observed between DCM and ND hearts&quot;)</code></pre>
+<pre><code>[1] &quot;No statistically significant shifts in cellular composition were observed between DCM and ND hearts&quot;</code></pre>
+<pre class="r"><code># Visualize the results
+ct &lt;- rownames(out)
+par(mfrow=c(3,3))
+for(i in 1:nrow(out)){
+  stripchart(x$Proportions[ct[i],]~group, vertical=TRUE, pch=16, 
+             method=&quot;jitter&quot;, ylab=&quot;Proportion&quot;, main=ct[i], 
+             col=ggplotColors(2), cex=1.5, cex.lab=1.5, cex.axis=1.5,
+             cex.main=1.5)
+}</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-12-4.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="figure-1e" class="section level1">
+<h1>Figure 1E</h1>
+<pre class="r"><code>broadct &lt;- factor(heart.integrated$Broad_celltype)
+sam &lt;- factor(heart.integrated$biorep,levels=c(&quot;f1&quot;,&quot;f2&quot;,&quot;f3&quot;,&quot;nd1&quot;,&quot;nd2&quot;,&quot;nd3&quot;,&quot;d1&quot;,&quot;d2&quot;,&quot;d3&quot;,&quot;d4&quot;))
+newgrp &lt;- paste(broadct,sam,sep=&quot;.&quot;)
+newgrp &lt;- factor(newgrp,levels=paste(rep(levels(broadct),each=10),levels(sam),sep=&quot;.&quot;))
+table(newgrp)</code></pre>
+<pre><code>newgrp
+       CM.f1        CM.f2        CM.f3       CM.nd1       CM.nd2       CM.nd3 
+        4639         7146         4548         1073         2221         4456 
+       CM.d1        CM.d2        CM.d3        CM.d4      Endo.f1      Endo.f2 
+        2925         2025         4093         1247          735          715 
+     Endo.f3     Endo.nd1     Endo.nd2     Endo.nd3      Endo.d1      Endo.d2 
+        1298          511          462          550          880         3099 
+     Endo.d3      Endo.d4  Pericyte.f1  Pericyte.f2  Pericyte.f3 Pericyte.nd1 
+         850          781          564          425          404          613 
+Pericyte.nd2 Pericyte.nd3  Pericyte.d1  Pericyte.d2  Pericyte.d3  Pericyte.d4 
+         280          260          822         1075          506          468 
+      Fib.f1       Fib.f2       Fib.f3      Fib.nd1      Fib.nd2      Fib.nd3 
+        1029          755         1201         1622         1688          805 
+      Fib.d1       Fib.d2       Fib.d3       Fib.d4    Immune.f1    Immune.f2 
+        3151         2404         1598         1832          287          274 
+   Immune.f3   Immune.nd1   Immune.nd2   Immune.nd3    Immune.d1    Immune.d2 
+         196          337          808          731          442         1501 
+   Immune.d3    Immune.d4    Neuron.f1    Neuron.f2    Neuron.f3   Neuron.nd1 
+         815         1053          109          130          110          207 
+  Neuron.nd2   Neuron.nd3    Neuron.d1    Neuron.d2    Neuron.d3    Neuron.d4 
+          71          133          189          120           95           47 
+      Smc.f1       Smc.f2       Smc.f3      Smc.nd1      Smc.nd2      Smc.nd3 
+          54           20          136           59           28           49 
+      Smc.d1       Smc.d2       Smc.d3       Smc.d4 
+         296          173          162           63 </code></pre>
+<pre class="r"><code>des &lt;- model.matrix(~0+newgrp)
+colnames(des) &lt;- levels(newgrp)
+dim(des)</code></pre>
+<pre><code>[1] 74451    70</code></pre>
+<pre class="r"><code># Get gene annotation and gene filtering
+# I&#39;m using gene annotation information from the `org.Hs.eg.db` package.
+
+ann &lt;- AnnotationDbi:::select(org.Hs.eg.db,keys=rownames(all),columns=c(&quot;SYMBOL&quot;,&quot;ENTREZID&quot;,&quot;ENSEMBL&quot;,&quot;GENENAME&quot;,&quot;CHR&quot;),keytype = &quot;SYMBOL&quot;)</code></pre>
+<pre><code>Warning in .deprecatedColsMessage(): Accessing gene location information via &#39;CHR&#39;,&#39;CHRLOC&#39;,&#39;CHRLOCEND&#39; is
+  deprecated. Please use a range based accessor like genes(), or select()
+  with columns values like TXCHROM and TXSTART on a TxDb or OrganismDb
+  object instead.</code></pre>
+<pre><code>&#39;select()&#39; returned 1:many mapping between keys and columns</code></pre>
+<pre class="r"><code>m &lt;- match(rownames(all),ann$SYMBOL)
+ann &lt;- ann[m,]
+table(ann$SYMBOL==rownames(all))</code></pre>
+<pre><code>
+ TRUE 
+33939 </code></pre>
+<pre class="r"><code># Remove mitochondrial and ribosomal genes and genes with no ENTREZID
+# These genes are not informative for downstream analysis.
+
+mito &lt;- grep(&quot;mitochondrial&quot;,ann$GENENAME)
+length(mito)</code></pre>
+<pre><code>[1] 224</code></pre>
+<pre class="r"><code>ribo &lt;- grep(&quot;ribosomal&quot;,ann$GENENAME)
+length(ribo)</code></pre>
+<pre><code>[1] 197</code></pre>
+<pre class="r"><code>missingEZID &lt;- which(is.na(ann$ENTREZID))
+length(missingEZID)</code></pre>
+<pre><code>[1] 10976</code></pre>
+<pre class="r"><code>m &lt;- match(colnames(heart.integrated),colnames(all))
+all.counts &lt;- all[,m]
+chuck &lt;- unique(c(mito,ribo,missingEZID))
+length(chuck)</code></pre>
+<pre><code>[1] 11318</code></pre>
+<pre class="r"><code>all.counts.keep &lt;- all.counts[-chuck,]
+ann.keep &lt;- ann[-chuck,]
+table(ann.keep$SYMBOL==rownames(all.counts.keep))</code></pre>
+<pre><code>
+ TRUE 
+22621 </code></pre>
+<pre class="r"><code># Remove sex chromosome genes so that the sex doesn&#39;t play a role in downstream analysis
+sexchr &lt;- ann.keep$CHR %in% c(&quot;X&quot;,&quot;Y&quot;)
+all.counts.keep &lt;- all.counts.keep[!sexchr,]
+ann.keep &lt;- ann.keep[!sexchr,]
+
+# Remove very lowly expressed genes
+# Removing very lowly expressed genes helps to reduce the noise in the data. Here we keep genes with at least 1 count in at least 20 cells. This means that a cluster made up of at least 20 cells can potentially be detected (minimum cluster size = 20 cells).
+numzero.genes &lt;- rowSums(all.counts.keep==0)
+table(numzero.genes &gt; (ncol(all.counts.keep)-20))</code></pre>
+<pre><code>
+FALSE  TRUE 
+18177  3456 </code></pre>
+<pre class="r"><code>keep.genes &lt;- numzero.genes &lt; (ncol(all.counts.keep)-20)
+table(keep.genes)</code></pre>
+<pre><code>keep.genes
+FALSE  TRUE 
+ 3492 18141 </code></pre>
+<pre class="r"><code>all.keep &lt;- all.counts.keep[keep.genes,]
+dim(all.keep)</code></pre>
+<pre><code>[1] 18141 74451</code></pre>
+<pre class="r"><code>ann.keep &lt;- ann.keep[keep.genes,]
+table(colnames(heart.integrated)==colnames(all.keep))</code></pre>
+<pre><code>
+ TRUE 
+74451 </code></pre>
+<pre class="r"><code>table(rownames(all.keep)==ann.keep$SYMBOL)</code></pre>
+<pre><code>
+ TRUE 
+18141 </code></pre>
+<pre class="r"><code>pb &lt;- all.keep %*% des
+y.pb &lt;- DGEList(pb)
+saminfo &lt;- matrix(unlist(strsplit(colnames(y.pb$counts),split=&quot;[.]&quot;)),ncol=2,byrow=TRUE)
+bct &lt;- factor(saminfo[,1])
+indiv &lt;- factor(saminfo[,2])
+group &lt;- rep(NA,ncol(y.pb))
+group[grep(&quot;f&quot;,indiv)] &lt;- &quot;Fetal&quot;
+group[grep(&quot;nd&quot;,indiv)] &lt;- &quot;ND&quot;
+group[grep(&quot;^d&quot;,indiv)] &lt;- &quot;DCM&quot;
+group &lt;- factor(group,levels=c(&quot;Fetal&quot;,&quot;ND&quot;,&quot;DCM&quot;))
+targets.pb &lt;- data.frame(bct,indiv,group)
+targets.pb$Sex &lt;- c(&quot;Male&quot;,&quot;Male&quot;,&quot;Female&quot;,&quot;Male&quot;,&quot;Female&quot;,&quot;Male&quot;,&quot;Male&quot;,&quot;Female&quot;,&quot;Female&quot;,&quot;Female&quot;)
+sexgroup &lt;- paste(group,targets.pb$Sex,sep=&quot;.&quot;)
+table(rownames(y.pb)==ann.keep$SYMBOL)</code></pre>
+<pre><code>
+ TRUE 
+18141 </code></pre>
+<pre class="r"><code>y.pb$genes &lt;- ann.keep
+
+bct2 &lt;- as.character(bct)
+bct2[bct2 == &quot;CM&quot;] &lt;- &quot;cardio&quot;
+bct2[bct2 == &quot;Endo&quot;] &lt;- &quot;endo&quot;
+bct2[bct2 == &quot;Pericyte&quot;] &lt;- &quot;peri&quot;
+bct2[bct2 == &quot;Fib&quot;] &lt;- &quot;fibro&quot;
+bct2[bct2 == &quot;Immune&quot;] &lt;- &quot;immune&quot;
+bct2[bct2 == &quot;Neuron&quot;] &lt;- &quot;neurons&quot;
+bct2[bct2 == &quot;Smc&quot;] &lt;- &quot;smc&quot;
+
+newgrp &lt;- paste(bct2,group,targets.pb$Sex,sep=&quot;.&quot;)
+newgrp &lt;- factor(newgrp)
+
+design &lt;- model.matrix(~0+newgrp)
+colnames(design) &lt;- levels(newgrp)
+y.pb &lt;- calcNormFactors(y.pb)
+v &lt;- voom(y.pb,design,plot=TRUE)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>fit &lt;- lmFit(v,design)
+
+cont.data &lt;- makeContrasts(DFcm = 0.5*(cardio.DCM.Male + cardio.DCM.Female) - 0.5*(cardio.Fetal.Male + cardio.Fetal.Female),
+                             DNcm = 0.5*(cardio.DCM.Male + cardio.DCM.Female) - 0.5*(cardio.ND.Male + cardio.ND.Female),
+                             FNcm = 0.5*(cardio.Fetal.Male + cardio.Fetal.Female) - 0.5*(cardio.ND.Male + cardio.ND.Female),
+                             FDcm = 0.5*(cardio.Fetal.Male + cardio.Fetal.Female) - 0.5*(cardio.DCM.Male + cardio.DCM.Female),
+                             NDcm = 0.5*(cardio.ND.Male + cardio.ND.Female) - 0.5*(cardio.DCM.Male + cardio.DCM.Female),
+                             NFcm = 0.5*(cardio.ND.Male + cardio.ND.Female) - 0.5*(cardio.Fetal.Male + cardio.Fetal.Female),
+
+                             DFfib = 0.5*(fibro.DCM.Male + fibro.DCM.Female) - 0.5*(fibro.Fetal.Male + fibro.Fetal.Female),
+                             DNfib = 0.5*(fibro.DCM.Male + fibro.DCM.Female) - 0.5*(fibro.ND.Male + fibro.ND.Female),
+                             FNfib = 0.5*(fibro.Fetal.Male + fibro.Fetal.Female) - 0.5*(fibro.ND.Male + fibro.ND.Female),
+                             FDfib = 0.5*(fibro.Fetal.Male + fibro.Fetal.Female) - 0.5*(fibro.DCM.Male + fibro.DCM.Female),
+                             NDfib = 0.5*(fibro.ND.Male + fibro.ND.Female) - 0.5*(fibro.DCM.Male + fibro.DCM.Female),
+                             NFfib = 0.5*(fibro.ND.Male + fibro.ND.Female) - 0.5*(fibro.Fetal.Male + fibro.Fetal.Female),
+
+                             DFendo = 0.5*(endo.DCM.Male + endo.DCM.Female) - 0.5*(endo.Fetal.Male + endo.Fetal.Female),
+                             DNendo = 0.5*(endo.DCM.Male + endo.DCM.Female) - 0.5*(endo.ND.Male + endo.ND.Female),
+                             FNendo = 0.5*(endo.Fetal.Male + endo.Fetal.Female) - 0.5*(endo.ND.Male + endo.ND.Female),
+                             FDendo = 0.5*(endo.Fetal.Male + endo.Fetal.Female) - 0.5*(endo.DCM.Male + endo.DCM.Female),
+                             NDendo = 0.5*(endo.ND.Male + endo.ND.Female) - 0.5*(endo.DCM.Male + endo.DCM.Female),
+                             NFendo = 0.5*(endo.ND.Male + endo.ND.Female) - 0.5*(endo.Fetal.Male + endo.Fetal.Female),
+
+                             DFperi = 0.5*(peri.DCM.Male + peri.DCM.Female) - 0.5*(peri.Fetal.Male + peri.Fetal.Female),
+                             DNperi = 0.5*(peri.DCM.Male + peri.DCM.Female) - 0.5*(peri.ND.Male + peri.ND.Female),
+                             FNperi = 0.5*(peri.Fetal.Male + peri.Fetal.Female) - 0.5*(peri.ND.Male + peri.ND.Female),
+                             FDperi = 0.5*(peri.Fetal.Male + peri.Fetal.Female) - 0.5*(peri.DCM.Male + peri.DCM.Female),
+                             NDperi = 0.5*(peri.ND.Male + peri.ND.Female) - 0.5*(peri.DCM.Male + peri.DCM.Female),
+                             NFperi = 0.5*(peri.ND.Male + peri.ND.Female) - 0.5*(peri.Fetal.Male + peri.Fetal.Female),
+
+                             DFimmune = 0.5*(immune.DCM.Male + immune.DCM.Female) - 0.5*(immune.Fetal.Male + immune.Fetal.Female),
+                             DNimmune = 0.5*(immune.DCM.Male + immune.DCM.Female) - 0.5*(immune.ND.Male + immune.ND.Female),
+                             FNimmune = 0.5*(immune.Fetal.Male + immune.Fetal.Female) - 0.5*(immune.ND.Male + immune.ND.Female),
+                             FDimmune = 0.5*(immune.Fetal.Male + immune.Fetal.Female) - 0.5*(immune.DCM.Male + immune.DCM.Female),
+                             NDimmune = 0.5*(immune.ND.Male + immune.ND.Female) - 0.5*(immune.DCM.Male + immune.DCM.Female),
+                             NFimmune = 0.5*(immune.ND.Male + immune.ND.Female) - 0.5*(immune.Fetal.Male + immune.Fetal.Female),
+
+                             DFneuron = 0.5*(neurons.DCM.Male + neurons.DCM.Female) - 0.5*(neurons.Fetal.Male + neurons.Fetal.Female),
+                             DNneuron = 0.5*(neurons.DCM.Male + neurons.DCM.Female) - 0.5*(neurons.ND.Male + neurons.ND.Female),
+                             FNneuron = 0.5*(neurons.Fetal.Male + neurons.Fetal.Female) - 0.5*(neurons.ND.Male + neurons.ND.Female),
+                             FDneuron = 0.5*(neurons.Fetal.Male + neurons.Fetal.Female) - 0.5*(neurons.DCM.Male + neurons.DCM.Female),
+                             NDneuron = 0.5*(neurons.ND.Male + neurons.ND.Female) - 0.5*(neurons.DCM.Male + neurons.DCM.Female),
+                             NFneuron = 0.5*(neurons.ND.Male + neurons.ND.Female) - 0.5*(neurons.Fetal.Male + neurons.Fetal.Female),
+
+                             DFsmc = 0.5*(smc.DCM.Male + smc.DCM.Female) - 0.5*(smc.Fetal.Male + smc.Fetal.Female),
+                             DNsmc = 0.5*(smc.DCM.Male + smc.DCM.Female) - 0.5*(smc.ND.Male + smc.ND.Female),
+                             FNsmc = 0.5*(smc.Fetal.Male + smc.Fetal.Female) - 0.5*(smc.ND.Male + smc.ND.Female),
+                             FDsmc = 0.5*(smc.Fetal.Male + smc.Fetal.Female) - 0.5*(smc.DCM.Male + smc.DCM.Female),
+                             NDsmc = 0.5*(smc.ND.Male + smc.ND.Female) - 0.5*(smc.DCM.Male + smc.DCM.Female),
+                             NFsmc = 0.5*(smc.ND.Male + smc.ND.Female) - 0.5*(smc.Fetal.Male + smc.Fetal.Female),
+                             levels=design)
+fit.data &lt;- contrasts.fit(fit,contrasts = cont.data)
+fit.data &lt;- eBayes(fit.data,robust=TRUE)
+
+summary(decideTests(fit.data))</code></pre>
+<pre><code>        DFcm  DNcm  FNcm  FDcm  NDcm  NFcm DFfib DNfib FNfib FDfib NDfib NFfib
+Down    3635  1085  2112  3091  1650  2474  2220   590  1288  1685   578  1706
+NotSig 11415 15406 13555 11415 15406 13555 14236 16973 15147 14236 16973 15147
+Up      3091  1650  2474  3635  1085  2112  1685   578  1706  2220   590  1288
+       DFendo DNendo FNendo FDendo NDendo NFendo DFperi DNperi FNperi FDperi
+Down     1502    107    647   1463    145    826   1652     27   1160   1270
+NotSig  15176  17889  16668  15176  17889  16668  15219  18092  15379  15219
+Up       1463    145    826   1502    107    647   1270     22   1602   1652
+       NDperi NFperi DFimmune DNimmune FNimmune FDimmune NDimmune NFimmune
+Down       22   1602      300      212      264      285      144      347
+NotSig  18092  15379    17556    17785    17530    17556    17785    17530
+Up         27   1160      285      144      347      300      212      264
+       DFneuron DNneuron FNneuron FDneuron NDneuron NFneuron DFsmc DNsmc FNsmc
+Down        256       13      324      220       20      420   491     5    68
+NotSig    17665    18108    17397    17665    18108    17397 17204 18132 17971
+Up          220       20      420      256       13      324   446     4   102
+       FDsmc NDsmc NFsmc
+Down     446     4   102
+NotSig 17204 18132 17971
+Up       491     5    68</code></pre>
+<pre class="r"><code>treat.data &lt;- treat(fit.data,lfc=0)
+
+dt.data&lt;-decideTests(treat.data)
+
+fdr &lt;- apply(treat.data$p.value, 2, function(x) p.adjust(x, method=&quot;BH&quot;))
+output &lt;- data.frame(treat.data$genes,LogFC=treat.data$coefficients,AveExp=treat.data$Amean,tstat=treat.data$t, pvalue=treat.data$p.value, fdr=fdr)
+
+
+DvN &lt;- matrix(NA,nrow = 2, ncol = 7)
+colnames(DvN) &lt;- c(&quot;CM&quot;,&quot;Endo&quot;,&quot;Pericyte&quot;,&quot;Fib&quot;,&quot;Immune&quot;,&quot;Neuron&quot;,&quot;Smc&quot;)
+rownames(DvN) &lt;- c(&quot;Up&quot;,&quot;Down&quot;)
+DvN[1,1] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNcm &lt; 0.05 &amp; output$LogFC.DNcm &gt; 1.5 ))[1]
+DvN[1,2] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNendo &lt; 0.05 &amp; output$LogFC.DNendo &gt; 1.5 ))[1]
+DvN[1,3] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNperi &lt; 0.05 &amp; output$LogFC.DNperi &gt; 1.5))[1]
+DvN[1,4] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNfib &lt; 0.05 &amp; output$LogFC.DNfib &gt; 1.5 ))[1]
+DvN[1,5] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNimmune &lt; 0.05 &amp; output$LogFC.DNimmune &gt; 1.5 ))[1]
+DvN[1,6] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNneuron &lt; 0.05 &amp; output$LogFC.DNneuron &gt; 1.5 ))[1]
+DvN[1,7] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNsmc &lt; 0.05 &amp; output$LogFC.DNsmc &gt; 1.5 ))[1]
+DvN[2,1] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNcm &lt; 0.05 &amp; output$LogFC.DNcm &lt; -1.5 ))[1]
+DvN[2,2] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNendo &lt; 0.05 &amp; output$LogFC.DNendo &lt; -1.5 ))[1]
+DvN[2,3] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNperi &lt; 0.05 &amp; output$LogFC.DNperi &lt; -1.5))[1]
+DvN[2,4] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNfib &lt; 0.05 &amp; output$LogFC.DNfib &lt; -1.5 ))[1]
+DvN[2,5] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNimmune &lt; 0.05 &amp; output$LogFC.DNimmune &lt; -1.5 ))[1]
+DvN[2,6] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNneuron &lt; 0.05 &amp; output$LogFC.DNneuron &lt; -1.5 ))[1]
+DvN[2,7] &lt;- NoGenes &lt;- dim(output %&gt;% filter(output$fdr.DNsmc &lt; 0.05 &amp; output$LogFC.DNsmc &lt; -1.5 ))[1]
+
+par(mfrow=c(1,1))
+par(mar=c(7,4,2,2))
+barplot(DvN,beside=TRUE,legend=TRUE,col=c(&quot;red&quot;,&quot;blue&quot;),ylab=&quot;Number of significant genes&quot;,las=2,xlab=&quot;&quot;, ylim = c(0,500))
+title(main = &quot;DCM versus ND&quot;)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-13-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="figure-1f" class="section level1">
+<h1>Figure 1F</h1>
+<pre class="r"><code># Finding fetal gene program in CM
+DvF_ns_FvN_s_DvN_s_up_CM &lt;- output %&gt;% filter(output$fdr.FNcm &lt; 0.05 &amp; output$fdr.DNcm &lt; 0.05 &amp; output$LogFC.DNcm  &gt; 1.5 &amp; output$LogFC.FNcm &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn_CM &lt;- output %&gt;% filter(output$fdr.FNcm &lt; 0.05 &amp; output$fdr.DNcm &lt; 0.05 &amp; output$LogFC.DNcm  &lt; -1.5 &amp; output$LogFC.FNcm &lt; -1.5)
+
+# Finding fetal gene program in Endo
+DvF_ns_FvN_s_DvN_s_up_Endo &lt;- output %&gt;% filter(output$fdr.FNendo &lt; 0.05 &amp; output$fdr.DNendo &lt; 0.05 &amp; output$LogFC.DNendo  &gt; 1.5 &amp; output$LogFC.FNendo &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn_Endo &lt;- output %&gt;% filter(output$fdr.FNendo &lt; 0.05 &amp; output$fdr.DNendo &lt; 0.05 &amp; output$LogFC.DNendo  &lt; -1.5 &amp; output$LogFC.FNendo &lt; -1.5)
+
+
+# Finding fetal gene program in Pericyte
+DvF_ns_FvN_s_DvN_s_up_peri &lt;- output %&gt;% filter(output$fdr.FNperi &lt; 0.05 &amp; output$fdr.DNperi &lt; 0.05 &amp; output$LogFC.DNperi  &gt; 1.5 &amp; output$LogFC.FNperi &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn_peri &lt;- output %&gt;% filter(output$fdr.FNperi &lt; 0.05 &amp; output$fdr.DNperi &lt; 0.05 &amp; output$LogFC.DNperi  &lt; -1.5 &amp; output$LogFC.FNperi &lt; -1.5)
+
+# Finding fetal gene program in Fib
+DvF_ns_FvN_s_DvN_s_up_Fib &lt;- output %&gt;% filter(output$fdr.FNfib &lt; 0.05 &amp; output$fdr.DNfib &lt; 0.05 &amp; output$LogFC.DNfib  &gt; 1.5 &amp; output$LogFC.FNfib &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn_Fib &lt;- output %&gt;% filter(output$fdr.FNfib &lt; 0.05 &amp; output$fdr.DNfib &lt; 0.05 &amp; output$LogFC.DNfib  &lt; -1.5 &amp; output$LogFC.FNfib &lt; -1.5)
+
+# Finding fetal gene program in Immune
+DvF_ns_FvN_s_DvN_s_up_immune &lt;- output %&gt;% filter(output$fdr.FNimmune &lt; 0.05 &amp; output$fdr.DNimmune &lt; 0.05 &amp; output$LogFC.DNimmune  &gt; 1.5 &amp; output$LogFC.FNimmune &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn_immune &lt;- output %&gt;% filter(output$fdr.FNimmune &lt; 0.05 &amp; output$fdr.DNimmune &lt; 0.05 &amp; output$LogFC.DNimmune  &lt; -1.5 &amp; output$LogFC.FNimmune &lt; -1.5)
+
+
+# Finding fetal gene program in Neuron
+DvF_ns_FvN_s_DvN_s_up_neuron &lt;- output %&gt;% filter(output$fdr.FNneuron &lt; 0.05 &amp; output$fdr.DNneuron &lt; 0.05 &amp; output$LogFC.DNneuron  &gt; 1.5 &amp; output$LogFC.FNneuron &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn_neuron &lt;- output %&gt;% filter(output$fdr.FNneuron &lt; 0.05 &amp; output$fdr.DNneuron &lt; 0.05 &amp; output$LogFC.DNneuron  &lt; -1.5 &amp; output$LogFC.FNneuron &lt; -1.5)
+
+
+# Finding fetal gene program in Smc
+DvF_ns_FvN_s_DvN_s_up_smc &lt;- output %&gt;% filter(output$fdr.FNsmc &lt; 0.05 &amp; output$fdr.DNsmc &lt; 0.05 &amp; output$LogFC.DNsmc  &gt; 1.5 &amp; output$LogFC.FNsmc &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn_smc &lt;- output %&gt;% filter(output$fdr.FNsmc &lt; 0.05 &amp; output$fdr.DNsmc &lt; 0.05 &amp; output$LogFC.DNsmc  &lt; -1.5 &amp; output$LogFC.FNsmc &lt; -1.5)
+
+fetal_react &lt;- matrix(NA,nrow = 2, ncol = 7)
+colnames(fetal_react) &lt;- c(&quot;CM&quot;,&quot;Endo&quot;,&quot;Pericyte&quot;,&quot;Fib&quot;,&quot;Immune&quot;,&quot;Neuron&quot;,&quot;Smc&quot;)
+rownames(fetal_react) &lt;- c(&quot;Up&quot;,&quot;Down&quot;)
+
+fetal_react[1,1] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_up_CM)[1]
+fetal_react[2,1] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_dn_CM)[1]
+fetal_react[1,2] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_up_Endo)[1]
+fetal_react[2,2] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_dn_Endo)[1]
+fetal_react[1,3] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_up_peri)[1]
+fetal_react[2,3] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_dn_peri)[1]
+fetal_react[1,4] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_up_Fib)[1]
+fetal_react[2,4] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_dn_Fib)[1]
+fetal_react[1,5] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_up_immune)[1]
+fetal_react[2,5] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_dn_immune)[1]
+fetal_react[1,6] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_up_neuron)[1]
+fetal_react[2,6] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_dn_neuron)[1]
+fetal_react[1,7] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_up_smc)[1]
+fetal_react[2,7] &lt;- NoGenes &lt;- dim(DvF_ns_FvN_s_DvN_s_dn_smc)[1]
+
+par(mfrow=c(1,1))
+par(mar=c(7,4,2,2))
+barplot(fetal_react,beside=TRUE,legend=TRUE,col=c(&quot;red&quot;,&quot;blue&quot;),ylab=&quot;Number of FDR &lt; 0.05 genes&quot;,las=2,xlab=&quot;&quot;, ylim = c(0,100))
+title(main = &quot;Reactivation of Fetal Genes&quot;)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="figure-1g" class="section level1">
+<h1>Figure 1G</h1>
+<pre class="r"><code># Finding fetal gene program in CM
+DvF_ns_FvN_s_DvN_s_up &lt;- output %&gt;% filter(output$fdr.FNcm &lt; 0.05 &amp; output$fdr.DNcm &lt; 0.05 &amp; output$LogFC.DNcm  &gt; 1.5 &amp; output$LogFC.FNcm &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn &lt;- output %&gt;% filter(output$fdr.FNcm &lt; 0.05 &amp; output$fdr.DNcm &lt; 0.05 &amp; output$LogFC.DNcm  &lt; -1.5 &amp; output$LogFC.FNcm &lt; -1.5)
+reactivated.cm &lt;- rbind(DvF_ns_FvN_s_DvN_s_up,DvF_ns_FvN_s_DvN_s_dn)
+
+#save(reactivated.cm,file=&quot;/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/FGP-CM.csv&quot;)
+
+cardio.integrated &lt;- readRDS(&quot;/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/cardio-int-FND.Rds&quot;)
+DefaultAssay(cardio.integrated) &lt;- &quot;RNA&quot;
+cardio.integrated$orig.ident &lt;- factor(cardio.integrated$orig.ident,levels = c(&quot;Fetal&quot;,&quot;ND&quot;,&quot;DCM&quot;))
+cardio.integrated$biorep &lt;- factor(cardio.integrated$biorep,levels = c(&quot;f1&quot;,&quot;f2&quot;,&quot;f3&quot;,&quot;nd1&quot;,&quot;nd2&quot;,&quot;nd3&quot;,&quot;d1&quot;,&quot;d2&quot;,&quot;d3&quot;,&quot;d4&quot;))
+sam &lt;- factor(cardio.integrated$orig.ident,levels=c(&quot;Fetal&quot;,&quot;ND&quot;,&quot;DCM&quot;))
+
+y.cardio &lt;- DGEList(cardio.integrated@assays$RNA@counts)
+logcounts &lt;- normCounts(y.cardio,log=TRUE,prior.count=0.5)
+
+index &lt;- match(reactivated.cm$SYMBOL, rownames(logcounts))
+index &lt;- na.omit(index)
+logcounts &lt;- logcounts[index,]
+
+sumexpr &lt;- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(sam)))
+rownames(sumexpr) &lt;- rownames(logcounts)
+colnames(sumexpr) &lt;- levels(sam)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] &lt;- tapply(logcounts[i,],sam,mean)
+}
+
+# Fetal Gene Program in CM
+aheatmap(sumexpr,Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
+         fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
+         scale=&quot;row&quot;)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>term.up &lt;- topGO(goana(de=DvF_ns_FvN_s_DvN_s_up$ENTREZID,universe=output$ENTREZID,species=&quot;Hs&quot;),number=1200)
+sigGO.up &lt;- term.up %&gt;% filter(term.up$P.DE &lt; 0.05 &amp; term.up$Ont ==&quot;BP&quot;)
+sigGO.up[1:10,]</code></pre>
+<pre><code>                                                                                                       Term
+GO:0007519                                                               skeletal muscle tissue development
+GO:0060538                                                                skeletal muscle organ development
+GO:0007517                                                                         muscle organ development
+GO:0045663                                                  positive regulation of myoblast differentiation
+GO:0090023                                                     positive regulation of neutrophil chemotaxis
+GO:0071624                                                    positive regulation of granulocyte chemotaxis
+GO:1902624                                                      positive regulation of neutrophil migration
+GO:0015861                                                                               cytidine transport
+GO:0003412 establishment of epithelial cell apical/basal polarity involved in camera-type eye morphogenesis
+GO:0045106                                                           intermediate filament depolymerization
+           Ont   N DE    P.DE
+GO:0007519  BP 138  5 0.00017
+GO:0060538  BP 149  5 0.00024
+GO:0007517  BP 296  6 0.00084
+GO:0045663  BP  18  2 0.00204
+GO:0090023  BP  22  2 0.00305
+GO:0071624  BP  23  2 0.00333
+GO:1902624  BP  24  2 0.00362
+GO:0015861  BP   1  1 0.00375
+GO:0003412  BP   1  1 0.00375
+GO:0045106  BP   1  1 0.00375</code></pre>
+<pre class="r"><code>term.dn &lt;- topGO(goana(de=DvF_ns_FvN_s_DvN_s_dn$ENTREZID,universe=output$ENTREZID,species=&quot;Hs&quot;),number=1200)
+sigGO.dn &lt;- term.dn %&gt;% filter(term.dn$P.DE &lt; 0.05 &amp; term.dn$Ont ==&quot;BP&quot;)
+sigGO.dn[1:10,]</code></pre>
+<pre><code>                                           Term Ont    N DE    P.DE
+GO:0098883                      synapse pruning  BP   11  4 3.1e-07
+GO:0045087               innate immune response  BP  628 15 2.5e-06
+GO:0150146            cell junction disassembly  BP   21  4 5.4e-06
+GO:0098542   defense response to other organism  BP  794 16 9.9e-06
+GO:0070488               neutrophil aggregation  BP    2  2 3.2e-05
+GO:0051238            sequestering of metal ion  BP   12  3 3.8e-05
+GO:0006952                     defense response  BP 1277 19 9.3e-05
+GO:0043207 response to external biotic stimulus  BP 1089 17 1.3e-04
+GO:0051707           response to other organism  BP 1089 17 1.3e-04
+GO:0006935                           chemotaxis  BP  519 11 1.8e-04</code></pre>
+</div>
+<div id="figure-1h" class="section level1">
+<h1>Figure 1H</h1>
+<pre class="r"><code># Finding fetal gene program in Fib
+DvF_ns_FvN_s_DvN_s_up &lt;- output %&gt;% filter(output$fdr.FNfib &lt; 0.05 &amp; output$fdr.DNfib &lt; 0.05 &amp; output$LogFC.DNfib  &gt; 1.5 &amp; output$LogFC.FNfib &gt; 1.5)
+DvF_ns_FvN_s_DvN_s_dn &lt;- output %&gt;% filter(output$fdr.FNfib &lt; 0.05 &amp; output$fdr.DNfib &lt; 0.05 &amp; output$LogFC.DNfib  &lt; -1.5 &amp; output$LogFC.FNfib &lt; -1.5)
+reactivated &lt;- rbind(DvF_ns_FvN_s_DvN_s_up,DvF_ns_FvN_s_DvN_s_dn)
+
+#save(reactivated,file=&quot;/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/FGP-Fib.csv&quot;)
+
+fibro.integrated &lt;- readRDS(&quot;/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/data/fibro-int-FND.Rds&quot;)
+DefaultAssay(fibro.integrated) &lt;- &quot;RNA&quot;
+fibro.integrated$orig.ident &lt;- factor(fibro.integrated$orig.ident,levels = c(&quot;Fetal&quot;,&quot;ND&quot;,&quot;DCM&quot;))
+fibro.integrated$biorep &lt;- factor(fibro.integrated$biorep,levels = c(&quot;f1&quot;,&quot;f2&quot;,&quot;f3&quot;,&quot;nd1&quot;,&quot;nd2&quot;,&quot;nd3&quot;,&quot;d1&quot;,&quot;d2&quot;,&quot;d3&quot;,&quot;d4&quot;))
+sam &lt;- factor(fibro.integrated$orig.ident,levels=c(&quot;Fetal&quot;,&quot;ND&quot;,&quot;DCM&quot;))
+
+y.fibro &lt;- DGEList(fibro.integrated@assays$RNA@counts)
+logcounts &lt;- normCounts(y.fibro,log=TRUE,prior.count=0.5)
+
+index &lt;- match(reactivated$SYMBOL, rownames(logcounts))
+index &lt;- na.omit(index)
+logcounts &lt;- logcounts[index,]
+
+sumexpr &lt;- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(sam)))
+rownames(sumexpr) &lt;- rownames(logcounts)
+colnames(sumexpr) &lt;- levels(sam)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] &lt;- tapply(logcounts[i,],sam,mean)
+}
+
+# Fetal Gene Program in Fib
+aheatmap(sumexpr,Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
+         fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
+         scale=&quot;row&quot;)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-16-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>term.up &lt;- topGO(goana(de=DvF_ns_FvN_s_DvN_s_up$ENTREZID,universe=output$ENTREZID,species=&quot;Hs&quot;),number=1200)
+sigGO.up &lt;- term.up %&gt;% filter(term.up$P.DE &lt; 0.05 &amp; term.up$Ont ==&quot;BP&quot;)
+sigGO.up[1:10,]</code></pre>
+<pre><code>                                           Term Ont    N DE    P.DE
+GO:0042692          muscle cell differentiation  BP  330 11 1.1e-08
+GO:0061061         muscle structure development  BP  563 13 3.6e-08
+GO:0014706   striated muscle tissue development  BP  345 10 2.1e-07
+GO:0060537            muscle tissue development  BP  361 10 3.1e-07
+GO:0030154                 cell differentiation  BP 3428 28 1.3e-06
+GO:0051146 striated muscle cell differentiation  BP  247  8 1.7e-06
+GO:0048869       cellular developmental process  BP 3495 28 2.0e-06
+GO:0001508                     action potential  BP  121  6 3.2e-06
+GO:0072359       circulatory system development  BP  984 14 3.6e-06
+GO:0048513             animal organ development  BP 2855 24 7.4e-06</code></pre>
+<pre class="r"><code>term.dn &lt;- topGO(goana(de=DvF_ns_FvN_s_DvN_s_dn$ENTREZID,universe=output$ENTREZID,species=&quot;Hs&quot;),number=1200)
+sigGO.dn &lt;- term.dn %&gt;% filter(term.dn$P.DE &lt; 0.05 &amp; term.dn$Ont ==&quot;BP&quot;)
+sigGO.dn[1:10,]</code></pre>
+<pre><code>                                                  Term Ont   N DE    P.DE
+GO:0071395 cellular response to jasmonic acid stimulus  BP   4  2 0.00012
+GO:0009753                   response to jasmonic acid  BP   4  2 0.00012
+GO:0046394        carboxylic acid biosynthetic process  BP 269  7 0.00023
+GO:0016053           organic acid biosynthetic process  BP 271  7 0.00024
+GO:0019752           carboxylic acid metabolic process  BP 747 11 0.00058
+GO:0044597              daunorubicin metabolic process  BP   9  2 0.00073
+GO:0043436                   oxoacid metabolic process  BP 769 11 0.00074
+GO:0006082              organic acid metabolic process  BP 787 11 0.00089
+GO:0030647 aminoglycoside antibiotic metabolic process  BP  10  2 0.00091
+GO:0044598               doxorubicin metabolic process  BP  10  2 0.00091</code></pre>
+</div>
+<div id="figure-1j" class="section level1">
+<h1>Figure 1J</h1>
+<pre class="r"><code>clust &lt;- factor(cardio.integrated$integrated_snn_res.0.1)
+sam &lt;- factor(cardio.integrated$orig.ident,levels=c(&quot;Fetal&quot;,&quot;ND&quot;,&quot;DCM&quot;))
+newgrp &lt;- paste(clust,sam,sep=&quot;.&quot;)
+newgrp &lt;- factor(newgrp,levels=paste(rep(levels(clust),each=3),levels(sam),sep=&quot;.&quot;))
+y.cardio &lt;- DGEList(cardio.integrated@assays$RNA@counts)
+logcounts &lt;- normCounts(y.cardio,log=TRUE,prior.count=0.5)
+
+index &lt;- match(reactivated.cm$SYMBOL, rownames(logcounts))
+index &lt;- na.omit(index)
+logcounts &lt;- logcounts[index,]
+
+sumexpr &lt;- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(newgrp)))
+rownames(sumexpr) &lt;- rownames(logcounts)
+colnames(sumexpr) &lt;- levels(newgrp)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] &lt;- tapply(logcounts[i,],newgrp,mean)
+}
+
+# Fetal Gene Program in sub clusters of CM broad cell type
+aheatmap(sumexpr[,c(1,4,7,10,13,16,2,5,8,11,14,17,3,6,9,12,15,18)],Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
+         fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
+         scale=&quot;row&quot;)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-17-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="figure-1k" class="section level1">
+<h1>Figure 1K</h1>
+<pre class="r"><code>clust &lt;- factor(fibro.integrated$integrated_snn_res.0.1)
+sam &lt;- factor(fibro.integrated$orig.ident,levels=c(&quot;Fetal&quot;,&quot;ND&quot;,&quot;DCM&quot;))
+newgrp &lt;- paste(clust,sam,sep=&quot;.&quot;)
+newgrp &lt;- factor(newgrp,levels=paste(rep(levels(clust),each=3),levels(sam),sep=&quot;.&quot;))
+y.fibro &lt;- DGEList(fibro.integrated@assays$RNA@counts)
+logcounts &lt;- normCounts(y.fibro,log=TRUE,prior.count=0.5)
+
+index &lt;- match(reactivated$SYMBOL, rownames(logcounts))
+index &lt;- na.omit(index)
+logcounts &lt;- logcounts[index,]
+
+sumexpr &lt;- matrix(NA,nrow=nrow(logcounts),ncol=length(levels(newgrp)))
+rownames(sumexpr) &lt;- rownames(logcounts)
+colnames(sumexpr) &lt;- levels(newgrp)
+
+for(i in 1:nrow(sumexpr)){
+  sumexpr[i,] &lt;- tapply(logcounts[i,],newgrp,mean)
+}
+
+# Fetal Gene Program in sub clusters of CM broad cell type
+aheatmap(sumexpr[,c(1,4,7,10,13,2,5,8,11,14,3,6,9,12,15)],Rowv = NA,Colv = NA, labRow = rownames(sumexpr),
+         fontsize=5,color=&quot;-RdYlBu&quot;,cexRow =1, cexCol = 1,
+         scale=&quot;row&quot;)</code></pre>
+<p><img src="figure/07-Figure.Rmd/unnamed-chunk-18-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.1.2 (2021-11-01)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS:   /hpc/software/installed/R/4.1.2/lib64/R/lib/libRblas.so
+LAPACK: /hpc/software/installed/R/4.1.2/lib64/R/lib/libRlapack.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] speckle_0.0.3               dplyr_1.0.8                
+ [3] clustree_0.4.4              ggraph_2.0.5               
+ [5] ggplot2_3.3.5               NMF_0.23.0                 
+ [7] bigmemory_4.5.36            cluster_2.1.2              
+ [9] rngtools_1.5.2              pkgmaker_0.32.2            
+[11] registry_0.5-1              scran_1.22.1               
+[13] scuttle_1.4.0               SingleCellExperiment_1.16.0
+[15] SummarizedExperiment_1.24.0 GenomicRanges_1.46.1       
+[17] GenomeInfoDb_1.30.1         DelayedArray_0.20.0        
+[19] MatrixGenerics_1.6.0        matrixStats_0.61.0         
+[21] Matrix_1.4-0                cowplot_1.1.1              
+[23] SeuratObject_4.0.4          Seurat_4.1.0               
+[25] org.Hs.eg.db_3.14.0         AnnotationDbi_1.56.2       
+[27] IRanges_2.28.0              S4Vectors_0.32.3           
+[29] Biobase_2.54.0              BiocGenerics_0.40.0        
+[31] RColorBrewer_1.1-2          edgeR_3.36.0               
+[33] limma_3.50.1                workflowr_1.7.0            
+
+loaded via a namespace (and not attached):
+  [1] utf8_1.2.2                reticulate_1.24          
+  [3] tidyselect_1.1.2          RSQLite_2.2.10           
+  [5] htmlwidgets_1.5.4         grid_4.1.2               
+  [7] BiocParallel_1.28.3       Rtsne_0.15               
+  [9] munsell_0.5.0             ScaledMatrix_1.2.0       
+ [11] codetools_0.2-18          ica_1.0-2                
+ [13] statmod_1.4.36            future_1.24.0            
+ [15] miniUI_0.1.1.1            withr_2.4.3              
+ [17] spatstat.random_2.1-0     colorspace_2.0-3         
+ [19] highr_0.9                 knitr_1.37               
+ [21] rstudioapi_0.13           ROCR_1.0-11              
+ [23] tensor_1.5                listenv_0.8.0            
+ [25] labeling_0.4.2            git2r_0.29.0             
+ [27] GenomeInfoDbData_1.2.7    polyclip_1.10-0          
+ [29] farver_2.1.0              bit64_4.0.5              
+ [31] rprojroot_2.0.2           parallelly_1.30.0        
+ [33] vctrs_0.3.8               generics_0.1.2           
+ [35] xfun_0.29                 doParallel_1.0.17        
+ [37] R6_2.5.1                  graphlayouts_0.8.0       
+ [39] rsvd_1.0.5                locfit_1.5-9.4           
+ [41] bitops_1.0-7              spatstat.utils_2.3-0     
+ [43] cachem_1.0.6              assertthat_0.2.1         
+ [45] promises_1.2.0.1          scales_1.1.1             
+ [47] gtable_0.3.0              org.Mm.eg.db_3.14.0      
+ [49] beachmat_2.10.0           globals_0.14.0           
+ [51] processx_3.5.2            goftest_1.2-3            
+ [53] tidygraph_1.2.0           rlang_1.0.1              
+ [55] splines_4.1.2             lazyeval_0.2.2           
+ [57] spatstat.geom_2.3-2       yaml_2.3.5               
+ [59] reshape2_1.4.4            abind_1.4-5              
+ [61] httpuv_1.6.5              tools_4.1.2              
+ [63] gridBase_0.4-7            ellipsis_0.3.2           
+ [65] spatstat.core_2.4-0       jquerylib_0.1.4          
+ [67] ggridges_0.5.3            Rcpp_1.0.8               
+ [69] plyr_1.8.6                sparseMatrixStats_1.6.0  
+ [71] zlibbioc_1.40.0           purrr_0.3.4              
+ [73] RCurl_1.98-1.6            ps_1.6.0                 
+ [75] rpart_4.1.16              deldir_1.0-6             
+ [77] viridis_0.6.2             pbapply_1.5-0            
+ [79] zoo_1.8-9                 ggrepel_0.9.1            
+ [81] fs_1.5.2                  magrittr_2.0.2           
+ [83] data.table_1.14.2         scattermore_0.8          
+ [85] lmtest_0.9-39             RANN_2.6.1               
+ [87] whisker_0.4               fitdistrplus_1.1-6       
+ [89] patchwork_1.1.1           mime_0.12                
+ [91] evaluate_0.15             xtable_1.8-4             
+ [93] gridExtra_2.3             compiler_4.1.2           
+ [95] tibble_3.1.6              KernSmooth_2.23-20       
+ [97] crayon_1.5.0              htmltools_0.5.2          
+ [99] mgcv_1.8-39               later_1.3.0              
+[101] tidyr_1.2.0               DBI_1.1.2                
+[103] tweenr_1.0.2              MASS_7.3-55              
+[105] cli_3.2.0                 parallel_4.1.2           
+[107] metapod_1.2.0             igraph_1.2.11            
+[109] bigmemory.sri_0.1.3       pkgconfig_2.0.3          
+[111] getPass_0.2-2             plotly_4.10.0            
+[113] spatstat.sparse_2.1-0     foreach_1.5.2            
+[115] bslib_0.3.1               dqrng_0.3.0              
+[117] XVector_0.34.0            stringr_1.4.0            
+[119] callr_3.7.0               digest_0.6.29            
+[121] sctransform_0.3.3         RcppAnnoy_0.0.19         
+[123] spatstat.data_2.1-2       Biostrings_2.62.0        
+[125] rmarkdown_2.12.1          leiden_0.3.9             
+[127] uwot_0.1.11               DelayedMatrixStats_1.16.0
+[129] shiny_1.7.1               lifecycle_1.0.1          
+[131] nlme_3.1-155              jsonlite_1.8.0           
+[133] BiocNeighbors_1.12.0      viridisLite_0.4.0        
+[135] fansi_1.0.2               pillar_1.7.0             
+[137] lattice_0.20-45           GO.db_3.14.0             
+[139] KEGGREST_1.34.0           fastmap_1.1.0            
+[141] httr_1.4.2                survival_3.3-0           
+[143] glue_1.6.2                iterators_1.0.14         
+[145] png_0.1-7                 bluster_1.4.0            
+[147] bit_4.0.4                 ggforce_0.3.3            
+[149] stringi_1.7.6             sass_0.4.0               
+[151] blob_1.2.2                BiocSingular_1.10.0      
+[153] memoise_2.0.1             irlba_2.3.5              
+[155] future.apply_1.8.1       </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
