@@ -1,0 +1,460 @@
+---
+title: "Ambient RNA & Doublet Removal using SoupX and DoubletFinder, respectively."
+author: "Neda R. Mehdiabadi"
+date: '2022-05-20'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+##Removing ambient RNA with SoupX
+library(Seurat)
+library(SoupX)
+library(DropletUtils)
+library(ggplot2)
+library(DoubletFinder)
+library(knitr)
+library(org.Hs.eg.db)
+library(dplyr)
+
+##fetal samples
+fetal.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetal-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetalObjs.Rdata")
+Idents(fetal.integrated) <- fetal.integrated$integrated_snn_res.0.3
+DefaultAssay(fetal.integrated) <- "RNA"
+
+targets <- read.delim("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/Fetal-Gene-Program-snRNAseq/data/targets.txt",header=TRUE, stringsAsFactors = FALSE)
+targets$FileName2 <- sapply(targets$FileName,function(x) sub(basename(x), "", x))
+targets$FileNameRaw <- paste(targets$FileName2,"raw_feature_bc_matrix",sep="")
+targets$FileNameFiltered <- paste(targets$FileName,"/",sep="")
+
+targets$Group_ID2 <- gsub("LV_","",targets$Group_ID)
+group <- c("fetal_1","fetal_2","fetal_3",
+           "non-diseased_1","non-diseased_2","non-diseased_3",
+           "diseased_1","diseased_2",
+           "diseased_3","diseased_4")
+m <- match(group, targets$Group_ID2)
+targets <- targets[m,]
+
+
+filt <- list()
+filt[1] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="fetal_1"])
+filt[2] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="fetal_2"])
+filt[3] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="fetal_3"])
+
+raw <- list()
+raw[1] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="fetal_1"])
+raw[2] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="fetal_2"])
+raw[3] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="fetal_3"])
+
+fetal.list <- SplitObject(fetal.integrated, split.by = "biorep")
+for (i in 1:length(fetal.list)) {
+  seurat  <- CreateSeuratObject(counts = filt[[i]])
+  seurat  <- SCTransform(seurat, verbose = F)
+  seurat  <- RunPCA(seurat, verbose = F)
+  seurat  <- RunUMAP(seurat, dims = 1:30, verbose = F)
+  soup.channel <- SoupChannel(raw[[i]], filt[[i]])
+  index <- which(fetal.integrated$biorep==levels(factor(fetal.integrated$biorep))[i])
+  umap <- seurat@reductions$umap@cell.embeddings
+  soup.channel  <- setClusters(soup.channel, setNames(fetal.integrated$Broad_celltype[index], colnames(filt[[i]])))
+  soup.channel  <- setDR(soup.channel, umap)
+  soup.channel  <- autoEstCont(soup.channel)
+  head(soup.channel$soupProfile[order(soup.channel$soupProfile$est, decreasing = T), ], n = 20)
+  adj.matrix  <- adjustCounts(soup.channel, roundToInt = T)
+#  dir.string <- paste("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/EvangelynSim-snRNAseq/data/soupX/", levels(factor(fetal.list[[i]]$biorep)),"_filtered")
+#  DropletUtils:::write10xCounts(dir.string, adj.matrix)
+}
+
+
+##non-diseased=young samples 
+nd.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/nd-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/ndObjs.Rdata")
+Idents(nd.integrated) <- nd.integrated$integrated_snn_res.0.3
+DefaultAssay(nd.integrated) <- "RNA"
+
+targets <- read.delim("./data/targets.txt",header=TRUE, stringsAsFactors = FALSE)
+targets$FileName2 <- sapply(targets$FileName,function(x) sub(basename(x), "", x))
+targets$FileNameRaw <- paste(targets$FileName2,"raw_feature_bc_matrix",sep="")
+targets$FileNameFiltered <- paste(targets$FileName,"/",sep="")
+
+targets$Group_ID2 <- gsub("LV_","",targets$Group_ID)
+group <- c("fetal_1","fetal_2","fetal_3",
+           "non-diseased_1","non-diseased_2","non-diseased_3",
+           "diseased_1","diseased_2",
+           "diseased_3","diseased_4")
+m <- match(group, targets$Group_ID2)
+targets <- targets[m,]
+
+
+filt <- list()
+filt[1] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="non-diseased_1"])
+filt[2] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="non-diseased_2"])
+filt[3] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="non-diseased_3"])
+
+raw <- list()
+raw[1] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="non-diseased_1"])
+raw[2] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="non-diseased_2"])
+raw[3] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="non-diseased_3"])
+
+nd.list <- SplitObject(nd.integrated, split.by = "biorep")
+for (i in 1:length(nd.list)) {
+seurat  <- CreateSeuratObject(counts = filt[[i]])
+seurat  <- SCTransform(seurat, verbose = F)
+seurat  <- RunPCA(seurat, verbose = F)
+seurat  <- RunUMAP(seurat, dims = 1:30, verbose = F)
+soup.channel <- SoupChannel(raw[[i]], filt[[i]])
+index <- which(nd.integrated$biorep==levels(factor(nd.integrated$biorep))[i])
+umap <- seurat@reductions$umap@cell.embeddings
+soup.channel  <- setClusters(soup.channel, setNames(nd.integrated$Broad_celltype[index], colnames(filt[[i]])))
+soup.channel  <- setDR(soup.channel, umap)
+soup.channel  <- autoEstCont(soup.channel)
+head(soup.channel$soupProfile[order(soup.channel$soupProfile$est, decreasing = T), ], n = 20)
+adj.matrix  <- adjustCounts(soup.channel, roundToInt = T)
+#dir.string <- paste("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/EvangelynSim-snRNAseq/data/soupX/",levels(factor(nd.list[[i]]$biorep)),"_filtered")
+#DropletUtils:::write10xCounts(dir.string, adj.matrix)
+}
+
+##DCM samples
+dcm.integrated <- readRDS(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcm-int.Rds")
+load(file="/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcmObjs.Rdata")
+Idents(dcm.integrated) <- dcm.integrated$integrated_snn_res.0.3
+DefaultAssay(dcm.integrated) <- "RNA"
+
+targets <- read.delim("./data/targets.txt",header=TRUE, stringsAsFactors = FALSE)
+targets$FileName2 <- sapply(targets$FileName,function(x) sub(basename(x), "", x))
+targets$FileNameRaw <- paste(targets$FileName2,"raw_feature_bc_matrix",sep="")
+targets$FileNameFiltered <- paste(targets$FileName,"/",sep="")
+
+targets$Group_ID2 <- gsub("LV_","",targets$Group_ID)
+group <- c("fetal_1","fetal_2","fetal_3",
+           "non-diseased_1","non-diseased_2","non-diseased_3",
+           "diseased_1","diseased_2",
+           "diseased_3","diseased_4")
+m <- match(group, targets$Group_ID2)
+targets <- targets[m,]
+
+
+filt <- list()
+filt[1] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="diseased_1"])
+filt[2] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="diseased_2"])
+filt[3] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="diseased_3"])
+filt[4] <- Read10X(data.dir = targets$FileNameFiltered[targets$Group_ID2=="diseased_4"])
+
+raw <- list()
+raw[1] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="diseased_1"])
+raw[2] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="diseased_2"])
+raw[3] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="diseased_3"])
+raw[4] <- Read10X(data.dir = targets$FileNameRaw[targets$Group_ID2=="diseased_4"])
+
+dcm.list <- SplitObject(dcm.integrated, split.by = "biorep")
+for (i in 1:length(dcm.list)) {
+  seurat  <- CreateSeuratObject(counts = filt[[i]])
+  seurat  <- SCTransform(seurat, verbose = F)
+  seurat  <- RunPCA(seurat, verbose = F)
+  seurat  <- RunUMAP(seurat, dims = 1:30, verbose = F)
+  soup.channel <- SoupChannel(raw[[i]], filt[[i]])
+  index <- which(dcm.integrated$biorep==levels(factor(dcm.integrated$biorep))[i])
+  umap <- seurat@reductions$umap@cell.embeddings
+  soup.channel  <- setClusters(soup.channel, setNames(dcm.integrated$Broad_celltype[index], colnames(filt[[i]])))
+  soup.channel  <- setDR(soup.channel, umap)
+  soup.channel  <- autoEstCont(soup.channel)
+  head(soup.channel$soupProfile[order(soup.channel$soupProfile$est, decreasing = T), ], n = 20)
+  adj.matrix  <- adjustCounts(soup.channel, roundToInt = T)
+  #dir.string <- paste("/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/EvangelynSim-snRNAseq/data/soupX/",levels(factor(dcm.list[[i]]$biorep)),"_filtered")
+  #DropletUtils:::write10xCounts(dir.string, adj.matrix)
+}
+
+
+#doubletFinder_input: adj.matrix generated via SoupX
+##fetal
+f1 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="fetal_1"])
+colnames(f1) <- paste(colnames(f1),"f1",sep="_")
+f2 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="fetal_2"])
+colnames(f2) <- paste(colnames(f2),"f2",sep="_")
+f3 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="fetal_3"])
+colnames(f3) <- paste(colnames(f3),"f3",sep="_")
+
+# Combine 3 samples into one big data matrix
+allf <- cbind(f1,f2,f3)
+
+#Gene filtering
+ann <- AnnotationDbi:::select(org.Hs.eg.db,keys=rownames(allf),columns=c("SYMBOL","ENTREZID","ENSEMBL","GENENAME","CHR"),keytype = "SYMBOL")
+m <- match(rownames(allf),ann$SYMBOL)
+ann <- ann[m,]
+table(ann$SYMBOL==rownames(allf))
+mito <- grep("mitochondrial",ann$GENENAME)
+length(mito)
+ribo <- grep("ribosomal",ann$GENENAME)
+length(ribo)
+missingEZID <- which(is.na(ann$ENTREZID))
+length(missingEZID)
+chuck <- unique(c(mito,ribo,missingEZID))
+length(chuck)
+allf.keep <- allf[-chuck,]
+ann.keep <- ann[-chuck,]
+table(ann.keep$SYMBOL==rownames(allf.keep))
+
+#Remove very lowly expressed genes
+numzero.genes <- rowSums(allf.keep==0)
+table(numzero.genes > (ncol(allf.keep)-20))
+keep.genes <- numzero.genes < (ncol(allf.keep)-20)
+table(keep.genes)
+allf.keep <- allf.keep[keep.genes,]
+dim(allf.keep)
+ann.keep <- ann.keep[keep.genes,]
+
+#Remove sex chromosome genes
+sexchr <- ann.keep$CHR %in% c("X","Y")
+allf.nosex <- allf.keep[!sexchr,]
+dim(allf.nosex)
+ann.nosex <- ann.keep[!sexchr,]
+
+biorep <- factor(rep(c("f1","f2","f3"),c(ncol(f1),ncol(f2),ncol(f3))))
+names(biorep) <- colnames(allf.keep)
+sex <- factor(rep(c("m","m","f"),c(ncol(f1),ncol(f2),ncol(f3))))
+names(sex) <- colnames(allf.keep)
+age <- rep(c(0.475,0.475,0.5),c(ncol(f1),ncol(f2),ncol(f3)))
+names(age) <- colnames(allf.keep)
+batch <- rep(c("B2","B1","B2"),c(ncol(f1),ncol(f2),ncol(f3)))
+names(batch) <- colnames(allf.keep)
+
+fetal <- CreateSeuratObject(counts = allf.nosex, project = "fetal")
+fetal <- AddMetaData(object=fetal, metadata = biorep, col.name="biorep")
+fetal <- AddMetaData(object=fetal, metadata = sex, col.name="sex")
+fetal <- AddMetaData(object=fetal, metadata = age, col.name="age")
+fetal <- AddMetaData(object=fetal, metadata = batch, col.name="batch")
+
+fetal.list <- SplitObject(fetal, split.by = "biorep")
+
+for(i in 1:length(fetal.list)) {
+  fetal.list[[i]] <- NormalizeData(fetal.list[[i]])
+  fetal.list[[i]] <- FindVariableFeatures(fetal.list[[i]], selection.method = "vst", nfeatures = 2000)
+  fetal.list[[i]] <- ScaleData(fetal.list[[i]])
+  fetal.list[[i]] <- RunPCA(fetal.list[[i]], npcs = 50, verbose = FALSE)
+  set.seed(10)
+  fetal.list[[i]] <- RunUMAP(fetal.list[[i]], reduction = "pca", dims = 1:30)
+  set.seed(10)
+  fetal.list[[i]] <- RunTSNE(fetal.list[[i]], reduction = "pca", dims = 1:30)
+}
+
+
+fetal.integrated <- readRDS("/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/fetal-int.Rds")
+DefaultAssay(fetal.integrated) <-"RNA"
+
+for (i in 1:length(fetal.list)){
+sweep.res.list_doublet <- paramSweep_v3(fetal.list[[i]], PCs = 1:10, sct = FALSE)
+sweep.stats_doublet <- summarizeSweep(sweep.res.list_doublet, GT = FALSE)
+bcmvn_doublet <- find.pK(sweep.stats_doublet)
+pK <- bcmvn_doublet$pK[which.max(bcmvn_doublet$BCmetric)]; pK <- as.numeric(levels(pK))[pK]; pK
+bcmvn_doublet %>% ggplot(aes(x=pK, y=BCmetric)) + geom_point(colour = "blue")+theme_classic()
+
+index <- which(fetal.integrated$biorep==levels(factor(fetal.integrated$biorep))[i])
+fetal.list[[i]]@meta.data$ClusteringResults <- as.character(fetal.integrated$Broad_celltype[index])
+
+annotations <- fetal.list[[i]]@meta.data$ClusteringResults
+homotypic.prop <- modelHomotypic(annotations)           
+nExp_poi <- round(0.046*nrow(fetal.list[[i]]@meta.data))  #Assuming 4.6% doublet formation rate for gel bead emulsion (GEM) formation
+nExp_poi.adj <- round(nExp_poi*(1-homotypic.prop))
+
+fetal.list[[i]] <- doubletFinder_v3(fetal.list[[i]], PCs = 1:10, pN = 0.25, pK = pK, nExp = nExp_poi.adj, reuse.pANN = FALSE , sct = FALSE)
+}
+
+#save(fetal.list,file="/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/EvangelynSim-snRNAseq/output/adjdata_soupx_doubletFinder/fetal-list.Rdata")
+
+##non-diseased
+y1 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="non-diseased_1"])
+colnames(y1) <- paste(colnames(y1),"y1",sep="_")
+y2 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="non-diseased_2"])
+colnames(y2) <- paste(colnames(y2),"y2",sep="_")
+y3 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="non-diseased_3"])
+colnames(y3) <- paste(colnames(y3),"y3",sep="_")
+
+# Combine 3 samples into one big data matrix
+ally <- cbind(y1,y2,y3)
+
+#Gene filtering
+ann <- AnnotationDbi:::select(org.Hs.eg.db,keys=rownames(ally),columns=c("SYMBOL","ENTREZID","ENSEMBL","GENENAME","CHR"),keytype = "SYMBOL")
+m <- match(rownames(ally),ann$SYMBOL)
+ann <- ann[m,]
+table(ann$SYMBOL==rownames(ally))
+mito <- grep("mitochondrial",ann$GENENAME)
+length(mito)
+ribo <- grep("ribosomal",ann$GENENAME)
+length(ribo)
+missingEZID <- which(is.na(ann$ENTREZID))
+length(missingEZID)
+chuck <- unique(c(mito,ribo,missingEZID))
+length(chuck)
+ally.keep <- ally[-chuck,]
+ann.keep <- ann[-chuck,]
+table(ann.keep$SYMBOL==rownames(ally.keep))
+
+#Remove very lowly expressed genes
+numzero.genes <- rowSums(ally.keep==0)
+table(numzero.genes > (ncol(ally.keep)-20))
+keep.genes <- numzero.genes < (ncol(ally.keep)-20)
+table(keep.genes)
+ally.keep <- ally.keep[keep.genes,]
+dim(ally.keep)
+ann.keep <- ann.keep[keep.genes,]
+
+#Remove sex chromosome genes
+sexchr <- ann.keep$CHR %in% c("X","Y")
+ally.nosex <- ally.keep[!sexchr,]
+dim(ally.nosex)
+ann.nosex <- ann.keep[!sexchr,]
+
+
+biorep <- factor(rep(c("y1","y2","y3"),c(ncol(y1),ncol(y2),ncol(y3))))
+names(biorep) <- colnames(ally.keep)
+sex <- factor(rep(c("m","f","m"),c(ncol(y1),ncol(y2),ncol(y3))))
+names(sex) <- colnames(ally.keep)
+age <- rep(c(4,10,14),c(ncol(y1),ncol(y2),ncol(y3)))
+names(age) <- colnames(ally.keep)
+batch <- rep(c("B1","B2","B2"),c(ncol(y1),ncol(y2),ncol(y3)))
+names(batch) <- colnames(ally.keep)
+age <-rep(c(4,10,14),c(ncol(y1),ncol(y2),ncol(y3)))
+names(age) <- colnames(ally.keep)
+
+young <- CreateSeuratObject(counts = ally.nosex, project = "young")
+young <- AddMetaData(object=young, metadata = biorep, col.name="biorep")
+young <- AddMetaData(object=young, metadata = sex, col.name="sex")
+young <- AddMetaData(object=young, metadata = age, col.name="age")
+young <- AddMetaData(object=young, metadata = batch, col.name="batch")
+
+young.list <- SplitObject(young, split.by = "biorep")
+
+for(i in 1:length(young.list)) {
+  young.list[[i]] <- NormalizeData(young.list[[i]])
+  young.list[[i]] <- FindVariableFeatures(young.list[[i]], selection.method = "vst", nfeatures = 2000)
+  young.list[[i]] <- ScaleData(young.list[[i]])
+  young.list[[i]] <- RunPCA(young.list[[i]], npcs = 50, verbose = FALSE)
+  set.seed(10)
+  young.list[[i]] <- RunUMAP(young.list[[i]], reduction = "pca", dims = 1:30)
+  set.seed(10)
+  young.list[[i]] <- RunTSNE(young.list[[i]], reduction = "pca", dims = 1:30)
+}
+
+nd.integrated <- readRDS("/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/young-int.Rds")
+DefaultAssay(nd.integrated) <-"RNA"
+
+for (i in 1:length(young.list)){
+  sweep.res.list_doublet <- paramSweep_v3(young.list[[i]], PCs = 1:10, sct = FALSE)
+  sweep.stats_doublet <- summarizeSweep(sweep.res.list_doublet, GT = FALSE)
+  bcmvn_doublet <- find.pK(sweep.stats_doublet)
+  pK <- bcmvn_doublet$pK[which.max(bcmvn_doublet$BCmetric)]; pK <- as.numeric(levels(pK))[pK]; pK
+  bcmvn_doublet %>% ggplot(aes(x=pK, y=BCmetric)) + geom_point(colour = "blue")+theme_classic()
+  
+  index <- which(nd.integrated$biorep==levels(factor(nd.integrated$biorep))[i])
+  young.list[[i]]@meta.data$ClusteringResults <- as.character(nd.integrated$Broad_celltype[index])
+  
+  annotations <- young.list[[i]]@meta.data$ClusteringResults
+  homotypic.prop <- modelHomotypic(annotations)           
+  nExp_poi <- round(0.046*nrow(young.list[[i]]@meta.data))  #Assuming 4.6% doublet formation rate for gel bead emulsion (GEM) formation 
+  nExp_poi.adj <- round(nExp_poi*(1-homotypic.prop))
+  
+  young.list[[i]] <- doubletFinder_v3(young.list[[i]], PCs = 1:10, pN = 0.25, pK = pK, nExp = nExp_poi.adj, reuse.pANN = FALSE , sct = FALSE)
+}
+
+#save(young.list,file="/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/EvangelynSim-snRNAseq/output/adjdata_soupx_doubletFinder/young-list.Rdata")
+
+
+##DCM
+d1 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="diseased_1"])
+colnames(d1) <- paste(colnames(d1),"d1",sep="_")
+d2 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="diseased_2"])
+colnames(d2) <- paste(colnames(d2),"d2",sep="_")
+d3 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="diseased_3"])
+colnames(d3) <- paste(colnames(d3),"d3",sep="_")
+d4 <- Read10X(data.dir = targets$FileName[targets$Group_ID2=="diseased_4"])
+colnames(d4) <- paste(colnames(d4),"d4",sep="_")
+
+
+# Combine 4 samples into one big data matrix
+alld <- cbind(d1,d2,d3,d4)
+
+#Gene filtering
+ann <- AnnotationDbi:::select(org.Hs.eg.db,keys=rownames(alld),columns=c("SYMBOL","ENTREZID","ENSEMBL","GENENAME","CHR"),keytype = "SYMBOL")
+m <- match(rownames(alld),ann$SYMBOL)
+ann <- ann[m,]
+table(ann$SYMBOL==rownames(alld))
+mito <- grep("mitochondrial",ann$GENENAME)
+length(mito)
+ribo <- grep("ribosomal",ann$GENENAME)
+length(ribo)
+missingEZID <- which(is.na(ann$ENTREZID))
+length(missingEZID)
+chuck <- unique(c(mito,ribo,missingEZID))
+length(chuck)
+alld.keep <- alld[-chuck,]
+ann.keep <- ann[-chuck,]
+table(ann.keep$SYMBOL==rownames(alld.keep))
+
+#Remove very lowly expressed genes
+numzero.genes <- rowSums(alld.keep==0)
+table(numzero.genes > (ncol(alld.keep)-20))
+keep.genes <- numzero.genes < (ncol(alld.keep)-20)
+table(keep.genes)
+alld.keep <- alld.keep[keep.genes,]
+dim(alld.keep)
+ann.keep <- ann.keep[keep.genes,]
+
+#Remove sex chromosome genes
+sexchr <- ann.keep$CHR %in% c("X","Y")
+alld.nosex <- alld.keep[!sexchr,]
+dim(alld.nosex)
+ann.nosex <- ann.keep[!sexchr,]
+
+
+biorep <- factor(rep(c("d1","d2","d3","d4"),c(ncol(d1),ncol(d2),ncol(d3),ncol(d4))))
+names(biorep) <- colnames(alld.keep)
+sex <- factor(rep(c("m","f","f","f"),c(ncol(d1),ncol(d2),ncol(d3),ncol(d4))))
+names(sex) <- colnames(alld.keep)
+age <- rep(c(5,10.83,9,10.83),c(ncol(d1),ncol(d2),ncol(d3),ncol(d4)))
+names(age) <- colnames(alld.keep)
+batch <- rep(c("B2","B2","B1","B2"),c(ncol(d1),ncol(d2),ncol(d3),ncol(d4)))
+names(batch) <- colnames(alld.keep)
+
+dcm <- CreateSeuratObject(counts = alld.nosex, project = "dcm")
+dcm <- AddMetaData(object=dcm, metadata = biorep, col.name="biorep")
+dcm <- AddMetaData(object=dcm, metadata = sex, col.name="sex")
+dcm <- AddMetaData(object=dcm, metadata = age, col.name="age")
+dcm <- AddMetaData(object=dcm, metadata = batch, col.name="batch")
+
+
+dcm.list <- SplitObject(dcm, split.by = "biorep")
+
+for(i in 1:length(dcm.list)) {
+  dcm.list[[i]] <- NormalizeData(dcm.list[[i]])
+  dcm.list[[i]] <- FindVariableFeatures(dcm.list[[i]], selection.method = "vst", nfeatures = 2000)
+  dcm.list[[i]] <- ScaleData(dcm.list[[i]])
+  dcm.list[[i]] <- RunPCA(dcm.list[[i]], npcs = 50, verbose = FALSE)
+  set.seed(10)
+  dcm.list[[i]] <- RunUMAP(dcm.list[[i]], reduction = "pca", dims = 1:30)
+  set.seed(10)
+  dcm.list[[i]] <- RunTSNE(dcm.list[[i]], reduction = "pca", dims = 1:30)
+}
+
+dcm.integrated <- readRDS("/group/card2/Neda/MCRI_LAB/single_cell_nuclei_rnaseq/Porello-heart-snRNAseq/output/RDataObjects/dcm-int.Rds")
+DefaultAssay(dcm.integrated) <-"RNA"
+
+for (i in 1:length(dcm.list)){
+  sweep.res.list_doublet <- paramSweep_v3(dcm.list[[i]], PCs = 1:10, sct = FALSE)
+  sweep.stats_doublet <- summarizeSweep(sweep.res.list_doublet, GT = FALSE)
+  bcmvn_doublet <- find.pK(sweep.stats_doublet)
+  pK <- bcmvn_doublet$pK[which.max(bcmvn_doublet$BCmetric)]; pK <- as.numeric(levels(pK))[pK]; pK
+  bcmvn_doublet %>% ggplot(aes(x=pK, y=BCmetric)) + geom_point(colour = "blue")+theme_classic()
+  
+  index <- which(dcm.integrated$biorep==levels(factor(dcm.integrated$biorep))[i])
+  dcm.list[[i]]@meta.data$ClusteringResults <- as.character(dcm.integrated$Broad_celltype[index])
+  
+  annotations <- dcm.list[[i]]@meta.data$ClusteringResults
+  homotypic.prop <- modelHomotypic(annotations)           
+  nExp_poi <- round(0.046*nrow(dcm.list[[i]]@meta.data))  #Assuming 4.6% doublet formation rate for gel bead emulsion (GEM) formation 
+  nExp_poi.adj <- round(nExp_poi*(1-homotypic.prop))
+  
+  dcm.list[[i]] <- doubletFinder_v3(dcm.list[[i]], PCs = 1:10, pN = 0.25, pK = pK, nExp = nExp_poi.adj, reuse.pANN = FALSE , sct = FALSE)
+}
+
+#save(dcm.list,file="/group/card2/Neda/MCRI_LAB/must-do-projects/EnzoPorrelloLab/dilated-cardiomyopathy/EvangelynSim-snRNAseq/output/adjdata_soupx_doubletFinder/dcm-list.Rdata")
+
+```
