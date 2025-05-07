@@ -1,4 +1,8 @@
 # Defining the fetal gene program at single cell resolution in dilated cardiomyopathy. 
+[![Publication: Circulation](https://img.shields.io/badge/Published%20in-Circulation-red)](link_to_publication_here)  
+[![MCRI](https://img.shields.io/badge/Institute-MCRI-blue)](https://www.mcri.edu.au)  
+[![Interactive Portal](https://img.shields.io/badge/Explore%20Data-HeartExplorer.org-brightgreen)](https://www.HeartExplorer.org)  
+[![workflowr](https://img.shields.io/badge/Workflowr-Project-ff69b4)](https://github.com/jdblischak/workflowr)
 
 This is a large single nuclei RNA-seq dataset from the Heart Regeneration group at MCRI. The samples were prepared by Evangelyn Sim and the data was processed and sequenced at the Translational Genomics Unit at MCRI.
 
