@@ -1,7 +1,12 @@
-# Defining the fetal gene program at single cell resolution in dilated cardiomyopathy. 
+# Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy 
 [![Publication: Circulation](https://img.shields.io/badge/Published%20in-Circulation-red)](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)   
 [![Interactive Portal](https://img.shields.io/badge/Explore%20Data-HeartExplorer.org-brightgreen)](https://www.HeartExplorer.org)  
+## Overview
+This project presents an in-depth analysis of **single-nucleus RNA-sequencing (snRNA-seq)** data to define the **fetal gene program** in **early-onset dilated cardiomyopathy (DCM)** at **single-cell resolution**. It supports the findings of the manuscript:
 
+> **Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy**  
+> Published in *Circulation*, 2022  
+> [Link to publication (https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)
 
 This is a large single nuclei RNA-seq dataset from the Heart Regeneration group at MCRI. The samples were prepared by Evangelyn Sim and the data was processed and sequenced at the Translational Genomics Unit at MCRI.
 
