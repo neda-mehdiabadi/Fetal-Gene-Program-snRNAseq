@@ -1,5 +1,5 @@
 # Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy 
-[![Publication: Circulation](https://img.shields.io/badge/Published%20in-Circulation-Impact Factor = 37.8-red)](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)   
+[![Publication: Circulation](https://img.shields.io/badge/Published%20in-Circulation-red)](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)   
 [![Interactive Portal](https://img.shields.io/badge/Explore%20Data-HeartExplorer.org-brightgreen)](https://www.HeartExplorer.org)  
 
 ## Overview
