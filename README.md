@@ -38,8 +38,8 @@ I have built an **interactive web portal** that permits interrogation of our dat
 - Download selected data tables
 
 ## Data and Code Availability 
-Beside the available code in this repository, comprehensive large-scale data analyses can also be retireved from [Analysis Website](https://32cc058f.isolation.zscaler.com/profile/42d28bab-620c-4970-b94c-e4fffa2be61d/zia-session/?tenant=9d2e8daef914&region=syd&controls_id=163da02d-da34-4baa-81c5-72b4d0007eec&user=07cb1d74b21d50b5d046821517d392529b10733c9bf29a2aba80e330f8f49c63&original_url=https%3A%2F%2Fneda-mehdiabadi.github.io%2FFetal-Gene-Program-snRNAseq%2F&key=sh-1&hmac=9a9975e8a201623ab1877126345e9d133e487167b4c98c18bbb0f2d8f135086e)
-Also the code used to build the [HeartExplorer](https://www.HeartExplorer.org/) is availavle on [GitHub](https://github.com/neda-mehdiabadi/HeartExplorer)
+Besides the code available in this repository, comprehensive large-scale data analyses can also be retrieved from the [Analysis Website](https://32cc058f.isolation.zscaler.com/profile/42d28bab-620c-4970-b94c-e4fffa2be61d/zia-session/?tenant=9d2e8daef914&region=syd&controls_id=163da02d-da34-4baa-81c5-72b4d0007eec&user=07cb1d74b21d50b5d046821517d392529b10733c9bf29a2aba80e330f8f49c63&original_url=https%3A%2F%2Fneda-mehdiabadi.github.io%2FFetal-Gene-Program-snRNAseq%2F&key=sh-1&hmac=9a9975e8a201623ab1877126345e9d133e487167b4c98c18bbb0f2d8f135086e). 
+The code used to build the [HeartExplorer](https://www.HeartExplorer.org/) is also available on [GitHub](https://github.com/neda-mehdiabadi/HeartExplorer).
 
 ## 📚 Citation
 If you use this dataset or code, please cite:
