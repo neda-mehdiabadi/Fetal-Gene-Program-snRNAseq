@@ -31,7 +31,7 @@ This project presents an in-depth analysis of **single-nucleus RNA-sequencing (s
   Identify gene expression signatures indicative of fetal-like reprogramming in disease.
 
 ## 🌐 Explore the Data
-We have built an **interactive web portal** that permits interrogation of our dataset and, hence, increases the dataset’s accessibility and utility. To check our website, please visit [www.HeartExplorer.org](http://www.HeartExplorer.org/).
+I have built an **interactive web portal** that permits interrogation of our dataset and, hence, increases the dataset’s accessibility and utility. To check our website, please visit [www.HeartExplorer.org](http://www.HeartExplorer.org/).
 - Search by cell type or gene name
 - View gene expression across conditions
 - Perform pathway enrichment analysis across conditions
