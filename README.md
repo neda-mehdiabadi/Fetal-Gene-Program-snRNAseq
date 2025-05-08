@@ -17,8 +17,7 @@ This project presents an in-depth analysis of **single-nucleus RNA-sequencing (s
 | Non-Diseased  | 4–14 years       | 3           | 16,445        |
 | DCM           | 5–10 years     | 4           | 31,593        |
 
-- All samples are derived from the **left ventricle**.
-- This is a large single nuclei RNA-seq dataset from the Heart Regeneration group at Murdoch Children's Research Institute. 
+- All samples are derived from the **left ventricle**. 
  
 ## 🔍 Key Analyses
 -  **Cell Type Identification**  
@@ -54,3 +53,5 @@ If you use this dataset or code, please cite:
   url     = {https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763}
   }
 ```
+## License
+This is a large single nuclei RNA-seq dataset from the Heart Regeneration group at Murdoch Children's Research Institute.
