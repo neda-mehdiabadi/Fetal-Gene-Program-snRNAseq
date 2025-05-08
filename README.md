@@ -4,10 +4,6 @@ This repository contains the code used to analyze and present the findings in th
 
 [![Interactive Portal](https://img.shields.io/badge/Explore%20Data-HeartExplorer.org-brightgreen)](https://www.HeartExplorer.org)  
 
-> **Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy**  
-> Published in *Circulation* (Impact Factor: 37.8; 2022)  
-> [Link to publication](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)
-
 ## Overview
 A central dogma in cardiac biology is that the gene expression pattern observed in postnatal heart resemblance to those observed during fetal cardiac development in response to stress. The phenomenon of fetal gene re-activation in heart failure has been traditionally studied in cardiomyocytes, however, the extent to which the fetal gene program is recapitulated in other cardiac cell types is unknown. We present single-nucleus RNA sequencing (snRNAseq) of apical left ventricle tissue from fetal (19-20 weeks, n=3), non-diseased (ND; 4-14 years, n=3) and early-onset DCM samples (5-10 years, n=4) to define the human fetal gene program in dilated cardiomyopathy (DCM), a common cause of heart failure in children and adults.
 
