@@ -1,4 +1,4 @@
-This repository contains the code used to analyze and present the findings in the paper titled [Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy] (https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org) with details as follows:
+This repository contains the code used to analyze and present the findings in the paper titled [Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org) with details as follows:
 
 [![Publication: Circulation (IF 37.8)](https://img.shields.io/badge/Published%20in-Circulation%20(IF%2037.8)-red)](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org) 
 
