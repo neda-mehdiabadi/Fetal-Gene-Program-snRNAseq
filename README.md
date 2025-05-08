@@ -44,7 +44,8 @@ If you use this dataset or code, please cite:
   title   = {Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy},
   journal = {Circulation},
   year    = {2022},
-  doi     = {https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org}  
+  doi     = {10.1161/CIRCULATIONAHA.121.057763},
+  url     = {https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763}
 }
 
 
