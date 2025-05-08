@@ -1,16 +1,16 @@
 # Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy 
-[![Publication: Circulation (IF 35.5)](https://img.shields.io/badge/Published%20in-Circulation%20(IF%2035.5)-red)](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org) 
+[![Publication: Circulation (IF 37.8)](https://img.shields.io/badge/Published%20in-Circulation%20(IF%2037.8)-red)](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org) 
 
 [![Interactive Portal](https://img.shields.io/badge/Explore%20Data-HeartExplorer.org-brightgreen)](https://www.HeartExplorer.org)  
 
-## Overview
+## 📖 Overview
 This project presents an in-depth analysis of **single-nucleus RNA-sequencing (snRNA-seq)** data to define the **fetal gene program** in **early-onset dilated cardiomyopathy (DCM)** at **single-cell resolution**. It supports the findings of the manuscript:
 
 > **Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy**  
 > Published in *Circulation* (Impact Factor: 37.8; 2022)  
 > [Link to publication](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)
 
-## Dataset Summary
+## 📊 Dataset Summary
 | Group         | Age Range       | Samples (n) | Nuclei Count |
 |---------------|------------------|-------------|---------------|
 | Fetal         | 19–20 weeks      | 3           | 27,136        |
@@ -20,7 +20,7 @@ This project presents an in-depth analysis of **single-nucleus RNA-sequencing (s
 - All samples are derived from the **left ventricle**.
 - This is a large single nuclei RNA-seq dataset from the Heart Regeneration group at Murdoch Children's Research Institute. 
  
-## Key Analyses
+## 🔍 Key Analyses
 -  **Cell Type Identification**  
   Annotate and cluster cell types within each group using unsupervised methods.
 -  **Cell Composition Analysis**  
@@ -30,7 +30,7 @@ This project presents an in-depth analysis of **single-nucleus RNA-sequencing (s
 -  **Fetal Gene Program Recovery in DCM**  
   Identify gene expression signatures indicative of fetal-like reprogramming in disease.
 
-## Explore the Data
+## 🌐 Explore the Data
 We have built an **interactive web portal** that permits interrogation of our data set and, hence, increases the data set’s accessibility and utility. To check our website, please visit [www.HeartExplorer.org](http://www.HeartExplorer.org/).
 - View expression of key genes across conditions  
 - Search by cell type or gene name  
@@ -40,7 +40,7 @@ We have built an **interactive web portal** that permits interrogation of our da
 If you use this dataset or code, please cite:
 
 > Mehdiabadi et al. **Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy**. *Circulation* (2022).  
-> [DOI/link here](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)
+> [Link to publication](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)
 
 
 A [workflowr][] project.
