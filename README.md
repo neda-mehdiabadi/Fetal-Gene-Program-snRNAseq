@@ -23,7 +23,7 @@ A central dogma in cardiac biology is that the gene expression pattern observed 
   Compare the changes in cell-type abundance between fetal, DCM, and their age-matched control samples.
 -  **Pathway and Transcriptional Analysis**  
   Discover regulatory changes and transcription factor activity in DCM.
--  **Fetal Gene Program Recovery in DCM**  
+-  **Fetal Gene Program Re-activation in DCM**  
   Identify gene expression signatures indicative of fetal-like reprogramming in disease.
 
 ## Explore the Data
