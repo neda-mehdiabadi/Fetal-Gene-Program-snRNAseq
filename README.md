@@ -32,7 +32,7 @@ This project presents an in-depth analysis of **single-nucleus RNA-sequencing (s
 
 ## 🌐 Explore the Data
 We have built an **interactive web portal** that permits interrogation of our dataset and, hence, increases the dataset’s accessibility and utility. To check our website, please visit [www.HeartExplorer.org](http://www.HeartExplorer.org/).
-- View expression of key genes across conditions  
+- View expression of genes across conditions  
 - Search by cell type or gene name  
 - Download selected data tables and plots  
 
