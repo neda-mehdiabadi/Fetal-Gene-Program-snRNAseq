@@ -38,8 +38,12 @@ We have built an **interactive web portal** that permits interrogation of our da
 
 ## 📚 Citation
 If you use this dataset or code, please cite:
-
-> Mehdiabadi, N. R., et al. **Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy**. *Circulation* (2022).    
-> [Link to publication](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)
+@article{MehdiabadiCirculation2022,
+  author  = {Neda Rahmani Mehdiabadi and et al.},
+  title   = {Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy},
+  journal = {Circulation},
+  year    = {2022},
+  doi     = {https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org}  % replace with actual DOI
+}
 
 
