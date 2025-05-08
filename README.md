@@ -1,11 +1,11 @@
-This repository contains the code used to analyze and present the findings in the paper titled [Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org) with details as follows:
+This repository contains the code used to analyze and present the findings in the paper titled [Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy (DCM)](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org) with details as follows:
 
 [![Publication: Circulation (IF 37.8)](https://img.shields.io/badge/Published%20in-Circulation%20(IF%2037.8)-red)](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org) 
 
 [![Interactive Portal](https://img.shields.io/badge/Explore%20Data-HeartExplorer.org-brightgreen)](https://www.HeartExplorer.org)  
 
 ## Overview
-A central dogma in cardiac biology is that the gene expression pattern observed in postnatal heart resemblance to those observed during fetal cardiac development in response to stress. The phenomenon of fetal gene re-activation in heart failure has been traditionally studied in cardiomyocytes, however, the extent to which the fetal gene program is recapitulated in other cardiac cell types is unknown. We present single-nucleus RNA sequencing (snRNAseq) of apical left ventricle tissue from fetal, non-diseased and early-onset DCM samples to define the human fetal gene program in dilated cardiomyopathy (DCM), a common cause of heart failure in children and adults.
+A central dogma in cardiac biology is that the gene expression pattern observed in postnatal heart resemblance to those observed during fetal cardiac development in response to stress. The phenomenon of fetal gene re-activation in heart failure has been traditionally studied in cardiomyocytes, however, the extent to which the fetal gene program is recapitulated in other cardiac cell types is unknown. We present single-nucleus RNA sequencing (snRNAseq) of apical left ventricle tissue from fetal, non-diseased and early-onset DCM samples to define the human fetal gene program in DCM, a common cause of heart failure in children and adults.
 
 ## 📊 Dataset Summary
 | Group         | Age Range       | Samples (n) | Nuclei Count |
