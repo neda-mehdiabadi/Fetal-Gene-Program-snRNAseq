@@ -39,6 +39,7 @@ We have built an **interactive web portal** that permits interrogation of our da
 ## 📚 Citation
 If you use this dataset or code, please cite:
 
+```bibtex
 @article{MehdiabadiCirculation2022,
   author  = {Neda Rahmani Mehdiabadi and et al.},
   title   = {Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy},
@@ -47,5 +48,9 @@ If you use this dataset or code, please cite:
   doi     = {10.1161/CIRCULATIONAHA.121.057763},
   url     = {https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763}
 }
+
+
+
+
 
 
