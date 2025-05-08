@@ -47,5 +47,5 @@ If you use this dataset or code, please cite:
   year    = {2022},
   doi     = {https://doi.org/10.1161/CIRCULATIONAHA.121.057763},
   url     = {https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763}
-}
+  }
 ```
