@@ -4,7 +4,7 @@
 [![Interactive Portal](https://img.shields.io/badge/Explore%20Data-HeartExplorer.org-brightgreen)](https://www.HeartExplorer.org)  
 
 ## 📖 Overview
-This project presents an in-depth analysis of **single-nucleus RNA-sequencing (snRNA-seq)** data to define the **fetal gene program** in **early-onset dilated cardiomyopathy (DCM)** at **single-cell resolution**. It supports the findings of the manuscript:
+This project presents an in-depth analysis of **single-nucleus RNA-sequencing (snRNA-seq)** data to define the **fetal gene program** in **dilated cardiomyopathy (DCM)** at **single-cell resolution**. It supports the findings of the manuscript:
 
 > **Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy**  
 > Published in *Circulation* (Impact Factor: 37.8; 2022)  
@@ -15,7 +15,7 @@ This project presents an in-depth analysis of **single-nucleus RNA-sequencing (s
 |---------------|------------------|-------------|---------------|
 | Fetal         | 19–20 weeks      | 3           | 27,136        |
 | Non-Diseased  | 4–14 years       | 3           | 16,445        |
-| Early-Onset DCM | 5–10 years     | 4           | 31,593        |
+| DCM           | 5–10 years     | 4           | 31,593        |
 
 - All samples are derived from the **left ventricle**.
 - This is a large single nuclei RNA-seq dataset from the Heart Regeneration group at Murdoch Children's Research Institute. 
