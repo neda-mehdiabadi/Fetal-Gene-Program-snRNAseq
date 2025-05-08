@@ -40,7 +40,7 @@ We have built an **interactive web portal** that permits interrogation of our da
 If you use this dataset or code, please cite:
 
 > Mehdiabadi et al. **Defining the Fetal Gene Program at Single-Cell Resolution in Dilated Cardiomyopathy**. *Circulation* (2022).  
-> [https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org]
+> [DOI/link here](https://www.ahajournals.org/doi/full/10.1161/CIRCULATIONAHA.121.057763?rfr_dat=cr_pub++0pubmed&url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org)
 
 
 A [workflowr][] project.
