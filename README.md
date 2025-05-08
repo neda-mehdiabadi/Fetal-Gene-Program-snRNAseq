@@ -5,13 +5,13 @@ This repository contains the code used to analyze and present the findings in th
 [![Interactive Portal](https://img.shields.io/badge/Explore%20Data-HeartExplorer.org-brightgreen)](https://www.HeartExplorer.org)  
 
 ## Overview
-A central dogma in cardiac biology is that the gene expression pattern observed in postnatal heart resemblance to those observed during fetal cardiac development in response to stress. The phenomenon of fetal gene re-activation in heart failure has been traditionally studied in cardiomyocytes, however, the extent to which the fetal gene program is recapitulated in other cardiac cell types is unknown. We present single-nucleus RNA sequencing (snRNAseq) of apical left ventricle tissue from fetal, non-diseased and early-onset DCM samples to define the human fetal gene program in DCM, a common cause of heart failure in children and adults.
+A central dogma in cardiac biology is that the gene expression pattern observed in postnatal heart resemblance to those observed during fetal cardiac development in response to stress. The phenomenon of fetal gene re-activation in heart failure has been traditionally studied in cardiomyocytes, however, the extent to which the fetal gene program is recapitulated in other cardiac cell types is unknown. We present single-nucleus RNA sequencing (snRNAseq) of apical left ventricle tissue from fetal, early-onset DCM and their age-matched control (ND) samples to define the human fetal gene program in DCM, a common cause of heart failure in children and adults.
 
 ## Dataset Summary
 | Group         | Age Range       | Samples (n) | Nuclei Count |
 |---------------|------------------|-------------|---------------|
 | Fetal         | 19–20 weeks      | 3           | 27,136        |
-| Non-Diseased  | 4–14 years       | 3           | 16,445        |
+| ND            | 4–14 years       | 3           | 16,445        |
 | DCM           | 5–10 years     | 4           | 31,593        |
 
 - All samples are derived from the **left ventricle**. 
@@ -20,7 +20,7 @@ A central dogma in cardiac biology is that the gene expression pattern observed 
 -  **Cell Type Identification**  
   Annotate and cluster cell types within each group using unsupervised methods.
 -  **Cell Composition Analysis**  
-  Compare shifts in cell-type abundance across healthy, fetal, and DCM states.
+  Compare the changes in cell-type abundance between fetal, DCM, and their age-matched control samples.
 -  **Pathway and Transcriptional Analysis**  
   Discover regulatory changes and transcription factor activity in DCM.
 -  **Fetal Gene Program Recovery in DCM**  
